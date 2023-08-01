@@ -15,22 +15,21 @@ import * as labels from "../app_utils/constants/Labels";
 interface ModalType {
   children?: ReactNode;
   messageRef?: any;
-  countyObject: any;
-  territoryOptions: any;
+  memberObject: any;
   reloadFn: any;
   isOpen: boolean;
   toggle: () => void;
 }
 
-const CountyFormDialogView = (props: ModalType) => {
+const MemberFormDialogView = (props: ModalType) => {
   const [recordId, setRecordId] = useState<string | null>(null);
-  const [countyName, setCountyName] = useState<string | null>(null);
-  const [countyTerritory, setCountyTerritory] = useState<string | null>(null);
-  const [chairpersonDateElected, setChairpersonDateElected] = useState<string | null>(null);
-  const [accounts, setAccounts] = useState<string | null>(null);
-  const [chairpersonAccountId, setChairpersonAccountId] = useState<string | null>(null);
-  const [isValidNameHint, setIsValidNameHint] = useState<string | null>(null);
-  const [isValidcountyHint, setIsValidcountyHint] = useState<string | null>(null);
+  const [firstName, setFirstName] = useState<string | null>(null);
+  const [lastName, setLastName] = useState<string | null>(null);
+  const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
+  const [isValidFirstNameHint, setIsValidFirstNameHint] = useState<string | null>(null);
+
+  const [isValidLastNameHint, setIsValidLastNameHint] = useState<string | null>(null);
+  const [isValidPhoneHint, setIsValidPhoneHint] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const message = useRef<any>();
 
@@ -39,23 +38,21 @@ const CountyFormDialogView = (props: ModalType) => {
    * in the parent view when the is changed
    */
   useEffect(() => {
-    setRecordId(props?.countyObject?.id);
-    setCountyName(props?.countyObject?.name);
-    setCountyTerritory(props?.countyObject?.territoryId);
-    setChairpersonDateElected(props?.countyObject?.chairpersonDateElected);
-    setChairpersonAccountId(props?.countyObject?.chairpersonAccountId);
-    fetchAccountsFromServer(null);
-  }, [props?.countyObject]);
+    populateForm(props?.memberObject);
+  }, [props?.memberObject]);
 
   /**
    * This clears the form by setting form values to null
    */
   const clearForm = () => {
-    setRecordId(null);
-    setCountyName(null);
-    setCountyTerritory(null);
-    setChairpersonAccountId(null);
-    setChairpersonDateElected(null);
+    populateForm(null);
+  };
+
+  const populateForm = (dataObject: any) => {
+    setRecordId(dataObject?.id);
+    setFirstName(dataObject?.firstName);
+    setLastName(dataObject?.lastName);
+    setPhoneNumber(dataObject?.phoneNumber);
   };
 
   /**
@@ -64,41 +61,31 @@ const CountyFormDialogView = (props: ModalType) => {
   let countyFormFields: any = [
     {
       type: FormFieldTypes.TEXT.toString(),
-      label: "Name",
-      value: countyName,
-      onChange: setCountyName,
-      setHint: setIsValidNameHint,
-      isValidHint: isValidNameHint,
+      label: "First Name",
+      value: firstName,
+      onChange: setFirstName,
+      setHint: setIsValidFirstNameHint,
+      isValidHint: isValidFirstNameHint,
       validateFieldFn: validateEmptyField,
     },
     {
-      type: FormFieldTypes.DROPDOWN.toString(),
-      label: "County",
-      value: countyTerritory,
-      onChange: setCountyTerritory,
-      options: props?.territoryOptions,
-      optionLabel: "name",
-      optionValue: "id",
-      setHint: setIsValidcountyHint,
-      isValidHint: isValidcountyHint,
+      type: FormFieldTypes.TEXT.toString(),
+      label: "Last Name",
+      value: lastName,
+      onChange: setLastName,
+      setHint: setIsValidLastNameHint,
+      isValidHint: isValidLastNameHint,
       validateFieldFn: validateEmptyField,
     },
+
     {
-      type: FormFieldTypes.DROPDOWN.toString(),
-      label: "Chairperson",
-      value: chairpersonAccountId,
-      onChange: setChairpersonAccountId,
-      options: accounts,
-      onFilter: (event: any) => filterAcccountsFromServer(event.filter),
-      optionLabel: "firstName",
-      optionValue: "id",
-      itemTemplate: accountLabelTemplate,
-    },
-    {
-      type: FormFieldTypes.DATE.toString(),
-      label: "date",
-      value: chairpersonDateElected,
-      onChange: setChairpersonDateElected,
+      type: FormFieldTypes.TEXT.toString(),
+      label: "Phone number",
+      value: phoneNumber,
+      onChange: setPhoneNumber,
+      setHint: setIsValidPhoneHint,
+      isValidHint: isValidPhoneHint,
+      validateFieldFn: validateEmptyField,
     },
   ];
 
@@ -139,50 +126,29 @@ const CountyFormDialogView = (props: ModalType) => {
 
     return isFormValid;
   };
-  /**
-   * This fetches accounts from the back office for the charperson dropdown
-   */
-  const fetchAccountsFromServer = (searchTerm: string | null) => {
-    let query: any = { offset: 0, limit: MAXIMUM_RECORDS_PER_PAGE };
-    if (searchTerm != null) {
-      query.searchTerm = searchTerm;
-    }
-    new BaseApiServiceImpl("/api/..")
-      .getRequestWithJsonResponse(query)
-      .then(async (response) => {
-        setAccounts(response?.records);
-      })
-      .catch((error) => {
-        MessageUtils.showErrorMessage(message, error.message);
-      });
-  };
 
-  /**
-   * This checks whether the account dropdown SearchTerm has more than 2 characters before it submits
-   * a request to the server to filter for accounts
-   * @param event
-   */
-  const filterAcccountsFromServer = (event: any) => {
-    const queryTerm = event.filter;
-    if (queryTerm != null && queryTerm.length >= 2) {
-      fetchAccountsFromServer(queryTerm);
-    }
-  };
   /**
    * This submits a save county request to the backoffice
    */
-  const saveCounty = () => {
+  const saveMember = () => {
     let countyData: any = {
       id: recordId,
-      name: countyName,
-      territoryId: countyTerritory,
-      chairpersonAccountId: chairpersonAccountId,
-      chairpersonDateElected: chairpersonDateElected,
+      firstName,
+      lastName,
+      salutationId: 1,
+      middleName: "",
+      physicalAddress: "",
+      phoneNumber,
+      emailAddress: "",
+      yearJoined: 2010,
+      occupationId: 5,
+      nin: "",
+      imageUrl: "",
     };
 
     if (validateForm()) {
       setIsSaving(true);
-      new BaseApiServiceImpl("/api/..")
+      new BaseApiServiceImpl("/api/v1/members")
         .postRequestWithJsonResponse(countyData)
         .then(async (response) => {
           setIsSaving(false);
@@ -211,7 +177,7 @@ const CountyFormDialogView = (props: ModalType) => {
   const countyDetailsDialogFooter = (
     <>
       <Button label={labels.LABEL_CANCEL} icon={PrimeIcons.TIMES} className="p-button-text" onClick={closeDialog} />
-      <Button label={labels.LABEL_SAVE} icon={PrimeIcons.SAVE} className="p-button-secondary" onClick={saveCounty} loading={isSaving} />
+      <Button label={labels.LABEL_SAVE} icon={PrimeIcons.SAVE} className="p-button-secondary" onClick={saveMember} loading={isSaving} />
     </>
   );
 
@@ -228,4 +194,4 @@ const CountyFormDialogView = (props: ModalType) => {
   );
 };
 
-export default CountyFormDialogView;
+export default MemberFormDialogView;

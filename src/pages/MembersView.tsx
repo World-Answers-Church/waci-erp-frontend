@@ -17,9 +17,10 @@ import { BaseApiServiceImpl } from "../app_utils/api/BaseApiServiceImpl";
 import { MessageUtils } from "../app_utils/utils/MessageUtils";
 import { replaceWithUnderscore, toReadableDate } from "../app_utils/utils/Utils";
 import { getFilterComponent } from "../app_utils/components/Filters";
-import CountyFormDialogView from "./CountyFormDialogView";
+import CountyFormDialogView from "./MemberFormDialogView";
 import { paginatorTemplate } from "../app_utils/components/PaginatorTemplate";
 import { filtersHeadertemplate } from "../app_utils/components/FiltersPanelHeader";
+import MemberFormDialogView from "./MemberFormDialogView";
 
 const MembersView = () => {
   const [records, setRecords] = useState<any>(null);
@@ -303,14 +304,7 @@ const MembersView = () => {
           <Paginator first={first} rows={constants.MAXIMUM_RECORDS_PER_PAGE} totalRecords={totalItems} alwaysShow={true} onPageChange={onPageChange} template={paginatorTemplate} />
         </div>
       </div>
-      <CountyFormDialogView
-        isOpen={openDialog}
-        toggle={toggleOpenDialog}
-        messageRef={message}
-        countyObject={selectedCounty}
-        territoryOptions={territories}
-        reloadFn={fetchRecordsFromServer}
-      ></CountyFormDialogView>
+      <MemberFormDialogView isOpen={openDialog} toggle={toggleOpenDialog} messageRef={message} memberObject={selectedCounty} reloadFn={fetchRecordsFromServer}></MemberFormDialogView>
     </div>
   );
 };
