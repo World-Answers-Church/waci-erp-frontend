@@ -22,7 +22,7 @@ import { paginatorTemplate } from "../app_utils/components/PaginatorTemplate";
 import { filtersHeadertemplate } from "../app_utils/components/FiltersPanelHeader";
 import MemberFormDialogView from "./MemberFormDialogView";
 
-const MembersView = () => {
+const UsersView = () => {
   const [records, setRecords] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchTermFilter, setSearchTermFilter] = useState<string | null>(null);
@@ -60,8 +60,8 @@ const MembersView = () => {
       },
     },
     {
-      label: `Members`,
-      icon: PrimeIcons.FLAG,
+      label: `System Users`,
+      icon: PrimeIcons.USERS,
     },
   ];
 
@@ -90,7 +90,7 @@ const MembersView = () => {
       .then(async (response) => {
         setIsLoading(false);
         setRecords(response?.records);
-        setTotalItems(response?.totalItems);
+        setTotalItems(response?.totalRecordCount);
       })
       .catch((error) => {
         setIsLoading(false);
@@ -309,4 +309,4 @@ const MembersView = () => {
   );
 };
 
-export default MembersView;
+export default UsersView;
