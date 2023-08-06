@@ -293,9 +293,8 @@ const MembersView = () => {
             <Column field="Index" header="#" style={{ width: "70px" }} body={rowIndexTemplate}></Column>
             <Column field="fullName" header={"Full Name"}></Column>
             <Column field="phoneNumber" header={"Phone Number"}></Column>
-            <Column field="physicalAddress" header={"Physical Address"} body={dateTemplate}></Column>
+            <Column field="physicalAddress" header={"Physical Address"}></Column>
             <Column field="yearJoined" header={"Year Joined"}></Column>
-
             <Column header={labels.LABEL_STATUS} body={statusBodyTemplate}></Column>
             <Column style={{ width: "120px" }} header="Actions" body={actionBodyTemplate}></Column>
           </DataTable>

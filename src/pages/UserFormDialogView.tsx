@@ -10,6 +10,7 @@ import { MISSING_FORM_INPUT_MESSAGE } from "../app_utils/constants/ErrorMessages
 import { BaseApiServiceImpl } from "../app_utils/api/BaseApiServiceImpl";
 import { MessageUtils } from "../app_utils/utils/MessageUtils";
 import * as labels from "../app_utils/constants/Labels";
+import { CSS_COL_12, CSS_COL_6, MAXIMUM_RECORDS_PER_PAGE } from "../app_utils/constants/Constants";
 
 interface ModalType {
   children?: ReactNode;
@@ -27,6 +28,9 @@ const UserFormDialogView = (props: ModalType) => {
   const [userName, setUserName] = useState<string | null>(null);
   const [gender, setGender] = useState<string | null>(null);
   const [genders, setGenders] = useState<string | null>(null);
+
+  const [roleIds, setRoleIds] = useState<any>([]);
+  const [roles, setRoles] = useState<any>([]);
   const [isValidFirstNameHint, setIsValidFirstNameHint] = useState<string | null>(null);
 
   const [isValidLastNameHint, setIsValidLastNameHint] = useState<string | null>(null);
@@ -41,6 +45,7 @@ const UserFormDialogView = (props: ModalType) => {
   useEffect(() => {
     populateForm(props?.record);
     fetchGendersFromServer();
+    fetchRolesFromServer();
   }, [props?.record]);
 
   const fetchGendersFromServer = () => {
@@ -48,6 +53,17 @@ const UserFormDialogView = (props: ModalType) => {
       .getRequestWithJsonResponse({})
       .then(async (response) => {
         setGenders(response?.records);
+      })
+      .catch((error) => {
+        MessageUtils.showErrorMessage(message, error.message);
+      });
+  };
+
+  const fetchRolesFromServer = () => {
+    new BaseApiServiceImpl("/api/v1/users/roles")
+      .getRequestWithJsonResponse({ offset: 0, limit: MAXIMUM_RECORDS_PER_PAGE })
+      .then(async (response) => {
+        setRoles(response?.records);
       })
       .catch((error) => {
         MessageUtils.showErrorMessage(message, error.message);
@@ -66,6 +82,7 @@ const UserFormDialogView = (props: ModalType) => {
     setFirstName(dataObject?.firstName);
     setLastName(dataObject?.lastName);
     setUserName(dataObject?.userName);
+    setRoleIds(dataObject?.roleIds);
   };
 
   /**
@@ -80,6 +97,7 @@ const UserFormDialogView = (props: ModalType) => {
       setHint: setIsValidFirstNameHint,
       isValidHint: isValidFirstNameHint,
       validateFieldFn: validateEmptyField,
+      width: CSS_COL_6,
     },
     {
       type: FormFieldTypes.TEXT.toString(),
@@ -89,6 +107,7 @@ const UserFormDialogView = (props: ModalType) => {
       setHint: setIsValidLastNameHint,
       isValidHint: isValidLastNameHint,
       validateFieldFn: validateEmptyField,
+      width: CSS_COL_6,
     },
 
     {
@@ -99,6 +118,7 @@ const UserFormDialogView = (props: ModalType) => {
       setHint: setIsValidUsernameHint,
       isValidHint: isValidUsernameHint,
       validateFieldFn: validateEmptyField,
+      width: CSS_COL_6,
     },
 
     {
@@ -107,6 +127,17 @@ const UserFormDialogView = (props: ModalType) => {
       value: gender,
       onChange: setGender,
       options: genders,
+      optionValue: "id",
+      optionLabel: "name",
+      width: CSS_COL_6,
+    },
+
+    {
+      type: FormFieldTypes.MULTISELECT.toString(),
+      label: "Roles",
+      value: roleIds,
+      onChange: setRoleIds,
+      options: roles,
       optionValue: "id",
       optionLabel: "name",
     },
@@ -162,6 +193,7 @@ const UserFormDialogView = (props: ModalType) => {
       emailAddress: userName,
       initialPassword: userName,
       genderId: gender,
+      roleIds: roleIds,
     };
 
     if (validateForm()) {

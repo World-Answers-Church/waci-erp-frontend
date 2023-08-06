@@ -7,7 +7,7 @@ import { FormFieldTypes } from "../app_utils/constants/FormFieldTypes";
 import { getFormFieldComponent, validateEmptyField } from "../app_utils/components/FormFieldTemplates";
 import { accountLabelTemplate, formatString } from "../app_utils/utils/Utils";
 import { MISSING_FORM_INPUT_MESSAGE } from "../app_utils/constants/ErrorMessages";
-import { MAXIMUM_RECORDS_PER_PAGE } from "../app_utils/constants/Constants";
+import { CSS_COL_12, CSS_COL_6, MAXIMUM_RECORDS_PER_PAGE } from "../app_utils/constants/Constants";
 import { BaseApiServiceImpl } from "../app_utils/api/BaseApiServiceImpl";
 import { MessageUtils } from "../app_utils/utils/MessageUtils";
 import * as labels from "../app_utils/constants/Labels";
@@ -27,6 +27,8 @@ const MemberFormDialogView = (props: ModalType) => {
   const [lastName, setLastName] = useState<string | null>(null);
   const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
   const [physicalAddress, setPhysicalAddress] = useState<string | null>(null);
+  const [gender, setGender] = useState<string | null>(null);
+  const [genders, setGenders] = useState<string | null>(null);
 
   const [isValidFirstNameHint, setIsValidFirstNameHint] = useState<string | null>(null);
   const [isValidLastNameHint, setIsValidLastNameHint] = useState<string | null>(null);
@@ -42,6 +44,7 @@ const MemberFormDialogView = (props: ModalType) => {
    */
   useEffect(() => {
     populateForm(props?.memberObject);
+    fetchGendersFromServer();
   }, [props?.memberObject]);
 
   /**
@@ -49,6 +52,16 @@ const MemberFormDialogView = (props: ModalType) => {
    */
   const clearForm = () => {
     populateForm(null);
+  };
+  const fetchGendersFromServer = () => {
+    new BaseApiServiceImpl("/api/v1/lookups/genders")
+      .getRequestWithJsonResponse({})
+      .then(async (response) => {
+        setGenders(response?.records);
+      })
+      .catch((error) => {
+        MessageUtils.showErrorMessage(message, error.message);
+      });
   };
 
   const populateForm = (dataObject: any) => {
@@ -71,6 +84,7 @@ const MemberFormDialogView = (props: ModalType) => {
       setHint: setIsValidFirstNameHint,
       isValidHint: isValidFirstNameHint,
       validateFieldFn: validateEmptyField,
+      width: CSS_COL_6,
     },
     {
       type: FormFieldTypes.TEXT.toString(),
@@ -80,6 +94,7 @@ const MemberFormDialogView = (props: ModalType) => {
       setHint: setIsValidLastNameHint,
       isValidHint: isValidLastNameHint,
       validateFieldFn: validateEmptyField,
+      width: CSS_COL_6,
     },
 
     {
@@ -90,6 +105,17 @@ const MemberFormDialogView = (props: ModalType) => {
       setHint: setIsValidPhoneHint,
       isValidHint: isValidPhoneHint,
       validateFieldFn: validateEmptyField,
+      width: CSS_COL_6,
+    },
+    {
+      type: FormFieldTypes.DROPDOWN.toString(),
+      label: "Gender",
+      value: gender,
+      onChange: setGender,
+      options: genders,
+      optionValue: "id",
+      optionLabel: "name",
+      width: CSS_COL_6,
     },
     {
       type: FormFieldTypes.TEXT.toString(),
@@ -99,6 +125,7 @@ const MemberFormDialogView = (props: ModalType) => {
       setHint: setIsValidPhysicalAddressHint,
       isValidHint: isValidPhysicalAddressHint,
       validateFieldFn: validateEmptyField,
+      width: CSS_COL_12,
     },
   ];
 
