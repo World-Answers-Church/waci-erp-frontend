@@ -20,8 +20,9 @@ import { getFilterComponent } from "../app_utils/components/Filters";
 import { paginatorTemplate } from "../app_utils/components/PaginatorTemplate";
 import { filtersHeadertemplate } from "../app_utils/components/FiltersPanelHeader";
 import MemberFormDialogView from "./MemberFormDialogView";
+import FundraisingCauseFormDialogView from "./FundraisingCauseFormDialogView";
 
-const MembersView = () => {
+const FundraisingCausesView = () => {
   const [records, setRecords] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchTermFilter, setSearchTermFilter] = useState<string | null>(null);
@@ -52,7 +53,7 @@ const MembersView = () => {
 
   const breadcrumbItems = [
     {
-      label: `Members`,
+      label: `Fundraising programmes`,
       icon: PrimeIcons.FLAG,
     },
   ];
@@ -77,7 +78,7 @@ const MembersView = () => {
     setIsLoading(true);
     let searchParameters: any = getQueryParameters();
 
-    new BaseApiServiceImpl("/api/v1/members")
+    new BaseApiServiceImpl("/api/v1/fundraising-causes")
       .getRequestWithJsonResponse(searchParameters)
       .then(async (response) => {
         setIsLoading(false);
@@ -269,7 +270,7 @@ const MembersView = () => {
         <BreadCrumb home={breadcrumbHome} model={breadcrumbItems} />
       </div>
       <div className="col-6 flex justify-content-end flex-wrap">
-        <Button label={"Create Member"} icon={PrimeIcons.PLUS} className="p-button-secondary" onClick={openNewFormDialog} />
+        <Button label={"Create Fundraising Program"} icon={PrimeIcons.PLUS} className="p-button-secondary" onClick={openNewFormDialog} />
       </div>
       <Messages ref={message} style={{ width: "100%" }} />
       <div className="col-12">
@@ -284,10 +285,10 @@ const MembersView = () => {
         <div className="card">
           <DataTable value={records} paginator={false} className="datatable-responsive" paginatorPosition="both" emptyMessage="No record found." loading={isLoading}>
             <Column field="Index" header="#" style={{ width: "70px" }} body={rowIndexTemplate}></Column>
-            <Column field="fullName" header={"Full Name"}></Column>
-            <Column field="phoneNumber" header={"Phone Number"}></Column>
-            <Column field="physicalAddress" header={"Physical Address"}></Column>
-            <Column field="yearJoined" header={"Year Joined"}></Column>
+            <Column field="name" header={"Name"}></Column>
+            <Column field="categoryName" header={"Category"}></Column>
+            <Column field="fundraisingPlanTypeName" header={"Fundraising Plan Type"}></Column>
+            <Column field="reccuringPaymentFrequencyName" header={"Reccuring Payment Frequency"}></Column>
             <Column header={labels.LABEL_STATUS} body={statusBodyTemplate}></Column>
             <Column style={{ width: "120px" }} header="Actions" body={actionBodyTemplate}></Column>
           </DataTable>
@@ -295,9 +296,15 @@ const MembersView = () => {
           <Paginator first={first} rows={constants.MAXIMUM_RECORDS_PER_PAGE} totalRecords={totalItems} alwaysShow={true} onPageChange={onPageChange} template={paginatorTemplate} />
         </div>
       </div>
-      <MemberFormDialogView isOpen={openDialog} toggle={toggleOpenDialog} messageRef={message} memberObject={selectedMember} reloadFn={fetchRecordsFromServer}></MemberFormDialogView>
+      <FundraisingCauseFormDialogView
+        isOpen={openDialog}
+        toggle={toggleOpenDialog}
+        messageRef={message}
+        memberObject={selectedMember}
+        reloadFn={fetchRecordsFromServer}
+      ></FundraisingCauseFormDialogView>
     </div>
   );
 };
 
-export default MembersView;
+export default FundraisingCausesView;

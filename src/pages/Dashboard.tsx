@@ -6,7 +6,10 @@ import { ProgressBar } from "primereact/progressbar";
 import { Menu } from "primereact/menu";
 import { RTLContext } from "../App";
 import { useHistory } from "react-router-dom";
-import { ROLES_ROUTE_PATH } from "../app_utils/route_paths/resolver/PageRoutes";
+import { MEMBERS_ROUTE_PATH } from "../app_utils/route_paths/resolver/PageRoutes";
+import { BaseApiServiceImpl } from "../app_utils/api/BaseApiServiceImpl";
+import { MAXIMUM_RECORDS_PER_PAGE } from "../app_utils/constants/Constants";
+import { formatAmountWithCommas } from "../app_utils/utils/Utils";
 
 const overviewChartData1 = {
   labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September"],
@@ -94,13 +97,25 @@ const Dashboard = (props: any) => {
   const menu3 = useRef<any>(null);
   const isRTL = useContext(RTLContext);
   const history = useHistory();
+  const [membersCount, setMembersCount] = useState<number>(0);
+
   // Fixed for 6.1.0
   // eslint-disable-next-line
   const chart1 = useRef<any>(null);
 
   useEffect(() => {
+    fetchRecordsFromServer();
     setOverviewColors();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const fetchRecordsFromServer = () => {
+    new BaseApiServiceImpl("/api/v1/members")
+      .getRequestWithJsonResponse({ offset: 0, limit: MAXIMUM_RECORDS_PER_PAGE })
+      .then(async (response) => {
+        setMembersCount(response?.totalItems);
+      })
+      .catch((error) => {});
+  };
 
   const getOverviewColors = () => {
     const isLight = props.colorMode === "light";
@@ -140,7 +155,7 @@ const Dashboard = (props: any) => {
       <div
         className="col-12 md:col-6 lg:col-4"
         onClick={() => {
-          history.replace(ROLES_ROUTE_PATH);
+          history.replace(MEMBERS_ROUTE_PATH);
         }}
       >
         <div className="card overview-box flex flex-column pt-2">
@@ -153,8 +168,8 @@ const Dashboard = (props: any) => {
           </div>
           <div className="flex justify-content-between mt-3 flex-wrap">
             <div className="flex flex-column" style={{ width: "80px" }}>
-              <span className="mb-1 fs-xlarge">640</span>
-              <span className="overview-status p-1 teal-bgcolor fs-small">1420 New</span>
+              <span className="mb-1 fs-xlarge">{formatAmountWithCommas(membersCount, null)}</span>
+              <span className="overview-status p-1 teal-bgcolor fs-small"> As of today</span>
             </div>
             <div className="flex align-items-end">
               <Chart ref={chart1} type="line" data={overviewChartData1} options={overviewChartOptions} height="60px" width="160px"></Chart>
@@ -182,8 +197,8 @@ const Dashboard = (props: any) => {
           </div>
           <div className="flex justify-content-between mt-3 flex-wrap">
             <div className="flex flex-column" style={{ width: "80px" }}>
-              <span className="mb-1 fs-xlarge">57K</span>
-              <span className="overview-status p-1 teal-bgcolor fs-small">9,640 Paid</span>
+              <span className="mb-1 fs-xlarge">0</span>
+              <span className="overview-status p-1 teal-bgcolor fs-small">0 Paid</span>
             </div>
             <div className="flex align-items-end">
               <Chart type="line" data={overviewChartData2} options={overviewChartOptions} height="60px" width="160px"></Chart>
@@ -211,8 +226,8 @@ const Dashboard = (props: any) => {
           </div>
           <div className="flex justify-content-between mt-3 flex-wrap">
             <div className="flex flex-column" style={{ width: "120px" }}>
-              <span className="mb-1 fs-xlarge">8572</span>
-              <span className="overview-status p-1 pink-bgcolor fs-small">25 This month</span>
+              <span className="mb-1 fs-xlarge">0</span>
+              <span className="overview-status p-1 pink-bgcolor fs-small">0 This month</span>
             </div>
             <div className="flex align-items-end">
               <Chart type="line" data={overviewChartData3} options={overviewChartOptions} height="60px" width="160px"></Chart>
