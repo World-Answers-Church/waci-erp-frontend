@@ -61,7 +61,12 @@ const AppInlineMenu = (props: any) => {
               </button>
             </li>
             <li className="layout-inline-menu-action-item tooltip" data-pr-tooltip="Logout">
-              <button className="flex flex-row align-items-center p-link">
+              <button
+                onClick={() => {
+                  UserSessionUtils.clearLocalStorageAndLogout();
+                }}
+                className="flex flex-row align-items-center p-link"
+              >
                 <i className="pi pi-power-off pi-fw"></i>
                 <span>Logout</span>
               </button>

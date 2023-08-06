@@ -6,6 +6,7 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { CSSTransition } from "react-transition-group";
 import { RTLContext } from "./App";
+import { UserSessionUtils } from "./app_utils/utils/UserSessionUtils";
 
 const AppTopbar = (props: any) => {
   const isRTL = useContext(RTLContext);
@@ -450,7 +451,12 @@ const AppTopbar = (props: any) => {
                     </button>
                   </li>
                   <li className="layout-topbar-action-item">
-                    <button className="flex flex-row align-items-center p-link">
+                    <button
+                      onClick={() => {
+                        UserSessionUtils.clearLocalStorageAndLogout();
+                      }}
+                      className="flex flex-row align-items-center p-link"
+                    >
                       <i className={classNames("pi pi-power-off", { "mr-2": !isRTL, "ml-2": isRTL })}></i>
                       <span>Logout</span>
                     </button>

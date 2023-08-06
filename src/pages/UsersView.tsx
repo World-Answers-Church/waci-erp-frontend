@@ -17,10 +17,9 @@ import { BaseApiServiceImpl } from "../app_utils/api/BaseApiServiceImpl";
 import { MessageUtils } from "../app_utils/utils/MessageUtils";
 import { replaceWithUnderscore, toReadableDate } from "../app_utils/utils/Utils";
 import { getFilterComponent } from "../app_utils/components/Filters";
-import CountyFormDialogView from "./MemberFormDialogView";
 import { paginatorTemplate } from "../app_utils/components/PaginatorTemplate";
 import { filtersHeadertemplate } from "../app_utils/components/FiltersPanelHeader";
-import MemberFormDialogView from "./MemberFormDialogView";
+import UserFormDialogView from "./UserFormDialogView";
 
 const UsersView = () => {
   const [records, setRecords] = useState<any>(null);
@@ -30,7 +29,7 @@ const UsersView = () => {
   const [totalItems, setTotalItems] = useState<number>(0);
   const [first, setFirst] = useState<number>(0);
   const [limit, setLimit] = useState<number>(constants.MAXIMUM_RECORDS_PER_PAGE);
-  const [selectedCounty, setSelectedCounty] = useState<any>(null);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
   const [territories, setTerritories] = useState<any>(null);
   const [territoryFilter, setTerritoryFilter] = useState<any>(null);
 
@@ -85,12 +84,12 @@ const UsersView = () => {
     setIsLoading(true);
     let searchParameters: any = getQueryParameters();
 
-    new BaseApiServiceImpl("/api/v1/members")
+    new BaseApiServiceImpl("/api/v1/users")
       .getRequestWithJsonResponse(searchParameters)
       .then(async (response) => {
         setIsLoading(false);
         setRecords(response?.records);
-        setTotalItems(response?.totalRecordCount);
+        setTotalItems(response?.totalItems);
       })
       .catch((error) => {
         setIsLoading(false);
@@ -130,7 +129,7 @@ const UsersView = () => {
    * This opens the edit territory dialog form by toggling the open dialog variable
    */
   const openEditFormDialog = (selectedRecord: any) => {
-    setSelectedCounty(selectedRecord);
+    setSelectedUser(selectedRecord);
     toggleOpenDialog();
   };
 
@@ -139,7 +138,7 @@ const UsersView = () => {
    * and setting the selected territory to null
    */
   const openNewFormDialog = () => {
-    setSelectedCounty(null);
+    setSelectedUser(null);
     toggleOpenDialog();
   };
 
@@ -277,7 +276,7 @@ const UsersView = () => {
         <BreadCrumb home={breadcrumbHome} model={breadcrumbItems} />
       </div>
       <div className="col-6 flex justify-content-end flex-wrap">
-        <Button label={"Create Member"} icon={PrimeIcons.PLUS} className="p-button-secondary" onClick={openNewFormDialog} />
+        <Button label={"Create User"} icon={PrimeIcons.PLUS} className="p-button-secondary" onClick={openNewFormDialog} />
       </div>
       <Messages ref={message} style={{ width: "100%" }} />
       <div className="col-12">
@@ -293,9 +292,8 @@ const UsersView = () => {
           <DataTable value={records} paginator={false} className="datatable-responsive" paginatorPosition="both" emptyMessage="No record found." loading={isLoading}>
             <Column field="Index" header="#" style={{ width: "70px" }} body={rowIndexTemplate}></Column>
             <Column field="fullName" header={"Full Name"}></Column>
-            <Column field="phoneNumber" header={"Phone Number"}></Column>
-            <Column field="yearJoined" header={"Year Joined"}></Column>
-            <Column field="occupationName" header={"Occupation"} body={dateTemplate}></Column>
+            <Column field="username" header={"Username"}></Column>
+            <Column field="emailAddress" header={"Email Address"}></Column>
 
             <Column header={labels.LABEL_STATUS} body={statusBodyTemplate}></Column>
             <Column style={{ width: "120px" }} header="Actions" body={actionBodyTemplate}></Column>
@@ -304,7 +302,7 @@ const UsersView = () => {
           <Paginator first={first} rows={constants.MAXIMUM_RECORDS_PER_PAGE} totalRecords={totalItems} alwaysShow={true} onPageChange={onPageChange} template={paginatorTemplate} />
         </div>
       </div>
-      <MemberFormDialogView isOpen={openDialog} toggle={toggleOpenDialog} messageRef={message} memberObject={selectedCounty} reloadFn={fetchRecordsFromServer}></MemberFormDialogView>
+      <UserFormDialogView isOpen={openDialog} toggle={toggleOpenDialog} messageRef={message} record={selectedUser} reloadFn={fetchRecordsFromServer}></UserFormDialogView>
     </div>
   );
 };
