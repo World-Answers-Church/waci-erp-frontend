@@ -17,7 +17,6 @@ import { BaseApiServiceImpl } from "../app_utils/api/BaseApiServiceImpl";
 import { MessageUtils } from "../app_utils/utils/MessageUtils";
 import { replaceWithUnderscore, toReadableDate } from "../app_utils/utils/Utils";
 import { getFilterComponent } from "../app_utils/components/Filters";
-import CountyFormDialogView from "./MemberFormDialogView";
 import { paginatorTemplate } from "../app_utils/components/PaginatorTemplate";
 import { filtersHeadertemplate } from "../app_utils/components/FiltersPanelHeader";
 import MemberFormDialogView from "./MemberFormDialogView";
@@ -30,7 +29,7 @@ const MembersView = () => {
   const [totalItems, setTotalItems] = useState<number>(0);
   const [first, setFirst] = useState<number>(0);
   const [limit, setLimit] = useState<number>(constants.MAXIMUM_RECORDS_PER_PAGE);
-  const [selectedCounty, setSelectedCounty] = useState<any>(null);
+  const [selectedMember, setSelectedMember] = useState<any>(null);
   const [territories, setTerritories] = useState<any>(null);
   const [territoryFilter, setTerritoryFilter] = useState<any>(null);
 
@@ -130,7 +129,7 @@ const MembersView = () => {
    * This opens the edit territory dialog form by toggling the open dialog variable
    */
   const openEditFormDialog = (selectedRecord: any) => {
-    setSelectedCounty(selectedRecord);
+    setSelectedMember(selectedRecord);
     toggleOpenDialog();
   };
 
@@ -139,7 +138,7 @@ const MembersView = () => {
    * and setting the selected territory to null
    */
   const openNewFormDialog = () => {
-    setSelectedCounty(null);
+    setSelectedMember(null);
     toggleOpenDialog();
   };
 
@@ -294,8 +293,8 @@ const MembersView = () => {
             <Column field="Index" header="#" style={{ width: "70px" }} body={rowIndexTemplate}></Column>
             <Column field="fullName" header={"Full Name"}></Column>
             <Column field="phoneNumber" header={"Phone Number"}></Column>
+            <Column field="physicalAddress" header={"Physical Address"} body={dateTemplate}></Column>
             <Column field="yearJoined" header={"Year Joined"}></Column>
-            <Column field="occupationName" header={"Occupation"} body={dateTemplate}></Column>
 
             <Column header={labels.LABEL_STATUS} body={statusBodyTemplate}></Column>
             <Column style={{ width: "120px" }} header="Actions" body={actionBodyTemplate}></Column>
@@ -304,7 +303,7 @@ const MembersView = () => {
           <Paginator first={first} rows={constants.MAXIMUM_RECORDS_PER_PAGE} totalRecords={totalItems} alwaysShow={true} onPageChange={onPageChange} template={paginatorTemplate} />
         </div>
       </div>
-      <MemberFormDialogView isOpen={openDialog} toggle={toggleOpenDialog} messageRef={message} memberObject={selectedCounty} reloadFn={fetchRecordsFromServer}></MemberFormDialogView>
+      <MemberFormDialogView isOpen={openDialog} toggle={toggleOpenDialog} messageRef={message} memberObject={selectedMember} reloadFn={fetchRecordsFromServer}></MemberFormDialogView>
     </div>
   );
 };

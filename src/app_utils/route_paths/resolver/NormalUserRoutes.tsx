@@ -2,7 +2,6 @@ import { PrimeIcons } from "primereact/api";
 import { BaseFrontendRoutes } from "./BaseFrontendRoutes";
 import { HOME_ROUTE_PATH, ROLES_ROUTE_PATH, USERS_ROUTE_PATH } from "./PageRoutes";
 import Dashboard from "../../../pages/Dashboard";
-import DashboardAnalytics from "../../../pages/DashboardAnalytics";
 import MembersView from "../../../pages/MembersView";
 import UsersView from "../../../pages/UsersView";
 export class NormalUserRoutes extends BaseFrontendRoutes {
@@ -16,21 +15,23 @@ export class NormalUserRoutes extends BaseFrontendRoutes {
 
   getNavigationMenu(): any[] {
     let navigationMenu = [];
-    navigationMenu.push({
-      items: [
-        { label: "Dashboard", icon: PrimeIcons.LIST, to: HOME_ROUTE_PATH, exact: true },
-        { label: "Members", icon: PrimeIcons.USERS, to: ROLES_ROUTE_PATH, exact: true },
-        { label: "Users", icon: PrimeIcons.USERS, to: USERS_ROUTE_PATH, exact: true },
-      ],
-    });
+    let menuItems = [];
+    menuItems.push({ label: "Dashboard", icon: PrimeIcons.LIST, to: HOME_ROUTE_PATH, exact: true });
+    menuItems.push({ label: "Members", icon: PrimeIcons.USERS, to: ROLES_ROUTE_PATH, exact: true });
+    if (this.userDetails.isSuperAdmin === true) {
+      menuItems.push({ label: "Users", icon: PrimeIcons.USERS, to: USERS_ROUTE_PATH, exact: true });
+    }
+    navigationMenu.push({ items: menuItems });
     return navigationMenu;
   }
 
   getAuthenticatedComponetRouters(): any[] {
-    return [
-      { path: HOME_ROUTE_PATH, label: "Home", component: Dashboard, exact: true },
-      { path: USERS_ROUTE_PATH, label: "Users", component: UsersView, exact: true },
-      { path: ROLES_ROUTE_PATH, label: "Members", component: MembersView, exact: true },
-    ];
+    let routes = [];
+    routes.push({ path: HOME_ROUTE_PATH, label: "DashBoard", component: Dashboard, exact: true });
+    routes.push({ path: ROLES_ROUTE_PATH, label: "Members", component: MembersView, exact: true });
+    if (this.userDetails.isSuperAdmin === true) {
+      routes.push({ path: USERS_ROUTE_PATH, label: "Users", component: UsersView, exact: true });
+    }
+    return routes;
   }
 }

@@ -5,9 +5,8 @@ import { PrimeIcons } from "primereact/api";
 import { Button } from "primereact/button";
 import { FormFieldTypes } from "../app_utils/constants/FormFieldTypes";
 import { getFormFieldComponent, validateEmptyField } from "../app_utils/components/FormFieldTemplates";
-import { accountLabelTemplate, formatString } from "../app_utils/utils/Utils";
+import { formatString } from "../app_utils/utils/Utils";
 import { MISSING_FORM_INPUT_MESSAGE } from "../app_utils/constants/ErrorMessages";
-import { MAXIMUM_RECORDS_PER_PAGE } from "../app_utils/constants/Constants";
 import { BaseApiServiceImpl } from "../app_utils/api/BaseApiServiceImpl";
 import { MessageUtils } from "../app_utils/utils/MessageUtils";
 import * as labels from "../app_utils/constants/Labels";
@@ -15,24 +14,23 @@ import * as labels from "../app_utils/constants/Labels";
 interface ModalType {
   children?: ReactNode;
   messageRef?: any;
-  memberObject: any;
+  record: any;
   reloadFn: any;
   isOpen: boolean;
   toggle: () => void;
 }
 
-const MemberFormDialogView = (props: ModalType) => {
+const UserFormDialogView = (props: ModalType) => {
   const [recordId, setRecordId] = useState<string | null>(null);
   const [firstName, setFirstName] = useState<string | null>(null);
   const [lastName, setLastName] = useState<string | null>(null);
-  const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
-  const [physicalAddress, setPhysicalAddress] = useState<string | null>(null);
-
+  const [userName, setUserName] = useState<string | null>(null);
+  const [gender, setGender] = useState<string | null>(null);
+  const [genders, setGenders] = useState<string | null>(null);
   const [isValidFirstNameHint, setIsValidFirstNameHint] = useState<string | null>(null);
-  const [isValidLastNameHint, setIsValidLastNameHint] = useState<string | null>(null);
-  const [isValidPhoneHint, setIsValidPhoneHint] = useState<string | null>(null);
-  const [isValidPhysicalAddressHint, setIsValidPhysicalAddressHint] = useState<string | null>(null);
 
+  const [isValidLastNameHint, setIsValidLastNameHint] = useState<string | null>(null);
+  const [isValidUsernameHint, setIsValidUsernameHint] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const message = useRef<any>();
 
@@ -41,8 +39,20 @@ const MemberFormDialogView = (props: ModalType) => {
    * in the parent view when the is changed
    */
   useEffect(() => {
-    populateForm(props?.memberObject);
-  }, [props?.memberObject]);
+    populateForm(props?.record);
+    fetchGendersFromServer();
+  }, [props?.record]);
+
+  const fetchGendersFromServer = () => {
+    new BaseApiServiceImpl("/api/v1/lookups/genders")
+      .getRequestWithJsonResponse({})
+      .then(async (response) => {
+        setGenders(response?.records);
+      })
+      .catch((error) => {
+        MessageUtils.showErrorMessage(message, error.message);
+      });
+  };
 
   /**
    * This clears the form by setting form values to null
@@ -55,14 +65,13 @@ const MemberFormDialogView = (props: ModalType) => {
     setRecordId(dataObject?.id);
     setFirstName(dataObject?.firstName);
     setLastName(dataObject?.lastName);
-    setPhoneNumber(dataObject?.phoneNumber);
-    setPhysicalAddress(dataObject?.physicalAddress);
+    setUserName(dataObject?.userName);
   };
 
   /**
-   * This is a list of member form fields
+   * This is a list of user form fields
    */
-  let memberFormFields: any = [
+  let userFormFields: any = [
     {
       type: FormFieldTypes.TEXT.toString(),
       label: "First Name",
@@ -84,37 +93,38 @@ const MemberFormDialogView = (props: ModalType) => {
 
     {
       type: FormFieldTypes.TEXT.toString(),
-      label: "Phone number",
-      value: phoneNumber,
-      onChange: setPhoneNumber,
-      setHint: setIsValidPhoneHint,
-      isValidHint: isValidPhoneHint,
+      label: "Email Address",
+      value: userName,
+      onChange: setUserName,
+      setHint: setIsValidUsernameHint,
+      isValidHint: isValidUsernameHint,
       validateFieldFn: validateEmptyField,
     },
+
     {
-      type: FormFieldTypes.TEXT.toString(),
-      label: "Physical Address",
-      value: physicalAddress,
-      onChange: setPhysicalAddress,
-      setHint: setIsValidPhysicalAddressHint,
-      isValidHint: isValidPhysicalAddressHint,
-      validateFieldFn: validateEmptyField,
+      type: FormFieldTypes.DROPDOWN.toString(),
+      label: "Gender",
+      value: gender,
+      onChange: setGender,
+      options: genders,
+      optionValue: "id",
+      optionLabel: "name",
     },
   ];
 
   /**
-   * This loops through the member object fields array to create the fields elements for
+   * This loops through the user object fields array to create the fields elements for
    * display
    */
-  let memberFields = memberFormFields.map((memberObjectField: any) => {
-    return getFormFieldComponent(memberObjectField);
+  let userFields = userFormFields.map((userObjectField: any) => {
+    return getFormFieldComponent(userObjectField);
   });
 
   /**
    * This clears the hint messages
    */
   const clearHints = () => {
-    memberFormFields.forEach((formField: any) => {
+    userFormFields.forEach((formField: any) => {
       if (formField.isValidHint) {
         formField.setHint(null);
       }
@@ -130,7 +140,7 @@ const MemberFormDialogView = (props: ModalType) => {
     clearHints();
     let isFormValid: boolean = true;
 
-    memberFormFields.forEach((formField: any) => {
+    userFormFields.forEach((formField: any) => {
       if (formField.setHint && (formField.value === null || formField.value === "" || formField.value === undefined)) {
         isFormValid = false;
         formField.setHint(formatString(MISSING_FORM_INPUT_MESSAGE, formField.label));
@@ -141,28 +151,23 @@ const MemberFormDialogView = (props: ModalType) => {
   };
 
   /**
-   * This submits a save member request to the backoffice
+   * This submits a save user request to the backoffice
    */
-  const saveMember = () => {
-    let memberData: any = {
+  const saveUser = () => {
+    let userData: any = {
       id: recordId,
       firstName,
       lastName,
-      salutationId: 1,
-      middleName: "",
-      physicalAddress: physicalAddress,
-      phoneNumber,
-      emailAddress: "",
-      yearJoined: 2010,
-      occupationId: 5,
-      nin: "",
-      imageUrl: "",
+      username: userName,
+      emailAddress: userName,
+      initialPassword: userName,
+      genderId: gender,
     };
 
     if (validateForm()) {
       setIsSaving(true);
-      new BaseApiServiceImpl("/api/v1/members")
-        .postRequestWithJsonResponse(memberData)
+      new BaseApiServiceImpl("/api/v1/users")
+        .postRequestWithJsonResponse(userData)
         .then(async (response) => {
           setIsSaving(false);
           clearForm();
@@ -187,24 +192,24 @@ const MemberFormDialogView = (props: ModalType) => {
   /**
    * This is the footer of the modal dialog
    */
-  const memberDetailsDialogFooter = (
+  const userDetailsDialogFooter = (
     <>
       <Button label={labels.LABEL_CANCEL} icon={PrimeIcons.TIMES} className="p-button-text" onClick={closeDialog} />
-      <Button label={labels.LABEL_SAVE} icon={PrimeIcons.SAVE} className="p-button-secondary" onClick={saveMember} loading={isSaving} />
+      <Button label={labels.LABEL_SAVE} icon={PrimeIcons.SAVE} className="p-button-secondary" onClick={saveUser} loading={isSaving} />
     </>
   );
 
   return (
-    <Dialog minX={200} visible={props.isOpen} header={"Create member form"} footer={memberDetailsDialogFooter} modal className="p-fluid" onHide={closeDialog} style={{ width: "50vw" }}>
+    <Dialog visible={props.isOpen} header={"Create user form"} footer={userDetailsDialogFooter} modal className="p-fluid" onHide={closeDialog} style={{ width: "50vw" }}>
       <Messages ref={message} />
       <div className="grid">
         <div className="col-12">
           <Messages ref={message} style={{ width: "100%" }} />
         </div>
-        {memberFields}
+        {userFields}
       </div>
     </Dialog>
   );
 };
 
-export default MemberFormDialogView;
+export default UserFormDialogView;
