@@ -1,6 +1,6 @@
 let resolveBackendEndpoint = "https://waci-erp-backend.herokuapp.com";
 if (window.location.hostname.includes("localhost") || window.location.hostname === "localhost") {
-  resolveBackendEndpoint = "https://church-erp.azurewebsites.net";
+  resolveBackendEndpoint = "http://localhost:8080";
 } else {
   resolveBackendEndpoint = "https://church-erp.azurewebsites.net";
 }
