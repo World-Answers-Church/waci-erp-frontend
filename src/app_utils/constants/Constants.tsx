@@ -59,7 +59,7 @@ export const ICON_BACKWARD = "pi pi-fast-backward";
 export const ICON_ADD_NEW = "pi pi-plus";
 export const ICON_EDIT = "pi pi-pencil";
 export const ICON_SYNC = "pi pi-sync";
-
+export const MINIMUM_FILTER_QUERY_LENGTH = 3;
 export const BACKEND_KNOWN_HTTP_ERROR_CODES = [400, 403, 415, 500];
 
 export const RECORD_STATUSES = [
@@ -84,19 +84,19 @@ export const FUNDRAISING_PLAN_TYPES = [
 
 export const PAYMENT_FREQUENCIES = [
   {
-    id: 0,
+    id: 1,
     name: "WEEKLY",
   },
   {
-    id: 1,
+    id: 2,
     name: "BI_WEEKLY",
   },
   {
-    id: 2,
+    id: 3,
     name: "MONTHLY",
   },
   {
-    id: 3,
+    id: 4,
     name: "YEARLY",
   },
 ];

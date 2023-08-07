@@ -21,6 +21,7 @@ import { paginatorTemplate } from "../app_utils/components/PaginatorTemplate";
 import { filtersHeadertemplate } from "../app_utils/components/FiltersPanelHeader";
 import MemberFormDialogView from "./MemberFormDialogView";
 import FundraisingCauseFormDialogView from "./FundraisingCauseFormDialogView";
+import PledgesFormDialogView from "./PledgesFormDialogView";
 
 const PledgesView = () => {
   const [records, setRecords] = useState<any>(null);
@@ -31,8 +32,8 @@ const PledgesView = () => {
   const [first, setFirst] = useState<number>(0);
   const [limit, setLimit] = useState<number>(constants.MAXIMUM_RECORDS_PER_PAGE);
   const [selectedMember, setSelectedMember] = useState<any>(null);
-  const [territories, setTerritories] = useState<any>(null);
-  const [territoryFilter, setTerritoryFilter] = useState<any>(null);
+  const [programs, setPrograms] = useState<any>([]);
+  const [programFilter, setProgramFilter] = useState<any>(null);
 
   let offset = 0;
 
@@ -66,7 +67,7 @@ const PledgesView = () => {
     let searchParameters: any = { offset: offset, limit: limit };
     if (searchTermFilter !== null) searchParameters.searchTerm = searchTermFilter;
     if (recordStatusFilter !== null) searchParameters.recordStatus = recordStatusFilter;
-    if (territoryFilter !== null) searchParameters.commaSeparatedTerritoryIds = territoryFilter;
+    if (programFilter !== null) searchParameters.programId = programFilter;
 
     return searchParameters;
   };
@@ -90,12 +91,25 @@ const PledgesView = () => {
         MessageUtils.showErrorMessage(message, error.message);
       });
   };
+  const fetchProgramsFromServer = () => {
+    let searchParameters: any = { offset: 0, limit: constants.MAXIMUM_RECORDS_PER_PAGE };
+
+    new BaseApiServiceImpl("/api/v1/fundraising-causes")
+      .getRequestWithJsonResponse(searchParameters)
+      .then(async (response) => {
+        setPrograms(response?.records);
+      })
+      .catch((error) => {
+        MessageUtils.showErrorMessage(message, "Failed to load programs");
+      });
+  };
 
   /**
    * This hook is called everytime the page is loaded
    */
   useEffect(() => {
     fetchRecordsFromServer();
+    fetchProgramsFromServer();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -105,7 +119,7 @@ const PledgesView = () => {
   const onSubmitFilter = () => {
     setSearchTermFilter(searchTermFilter);
     setRecordStatusFilter(recordStatusFilter);
-    setTerritoryFilter(territoryFilter);
+    setProgramFilter(programFilter);
     fetchRecordsFromServer();
   };
 
@@ -115,7 +129,7 @@ const PledgesView = () => {
   const resetFilters = () => {
     setSearchTermFilter("");
     setRecordStatusFilter(null);
-    setTerritoryFilter(null);
+    setProgramFilter(null);
     fetchRecordsFromServer();
   };
 
@@ -237,12 +251,12 @@ const PledgesView = () => {
       onkeydownFn: onSubmitFilter,
     },
     {
-      type: "multiselect",
-      value: territoryFilter,
-      onChangeFn: setTerritoryFilter,
-      id: "countryFilter",
-      label: labels.LABEL_TERRITORY,
-      options: territories,
+      type: "dropdown",
+      value: programFilter,
+      onChangeFn: setProgramFilter,
+      id: "setTerritoryFilter",
+      label: "Program",
+      options: programs,
       optionLabel: "name",
       optionValue: "id",
       colWidth: constants.CSS_FILTER_DEFAULT_DIV,
@@ -285,10 +299,10 @@ const PledgesView = () => {
         <div className="card">
           <DataTable value={records} paginator={false} className="datatable-responsive" paginatorPosition="both" emptyMessage="No record found." loading={isLoading}>
             <Column field="Index" header="#" style={{ width: "70px" }} body={rowIndexTemplate}></Column>
-            <Column field="name" header={"Name"}></Column>
-            <Column field="categoryName" header={"Category"}></Column>
-            <Column field="fundraisingPlanTypeName" header={"Fundraising Plan Type"}></Column>
-            <Column field="reccuringPaymentFrequencyName" header={"Reccuring Payment Frequency"}></Column>
+            <Column field="memberName" header={"Member"}></Column>
+            <Column field="fundraisingCauseName" header={"Programme"}></Column>
+            <Column field="amount" header={"Amount"}></Column>
+            <Column field="date" header={"Date"}></Column>
             <Column header={labels.LABEL_STATUS} body={statusBodyTemplate}></Column>
             <Column style={{ width: "120px" }} header="Actions" body={actionBodyTemplate}></Column>
           </DataTable>
@@ -296,13 +310,7 @@ const PledgesView = () => {
           <Paginator first={first} rows={constants.MAXIMUM_RECORDS_PER_PAGE} totalRecords={totalItems} alwaysShow={true} onPageChange={onPageChange} template={paginatorTemplate} />
         </div>
       </div>
-      <FundraisingCauseFormDialogView
-        isOpen={openDialog}
-        toggle={toggleOpenDialog}
-        messageRef={message}
-        memberObject={selectedMember}
-        reloadFn={fetchRecordsFromServer}
-      ></FundraisingCauseFormDialogView>
+      <PledgesFormDialogView isOpen={openDialog} toggle={toggleOpenDialog} messageRef={message} memberObject={selectedMember} reloadFn={fetchRecordsFromServer}></PledgesFormDialogView>
     </div>
   );
 };

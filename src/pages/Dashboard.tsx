@@ -6,7 +6,7 @@ import { ProgressBar } from "primereact/progressbar";
 import { Menu } from "primereact/menu";
 import { RTLContext } from "../App";
 import { useHistory } from "react-router-dom";
-import { MEMBERS_ROUTE_PATH } from "../app_utils/route_paths/resolver/PageRoutes";
+import { MEMBERS_ROUTE_PATH, PLEDGES_ROUTE_PATH, PLEDGE_PAYMENTS_ROUTE_PATH } from "../app_utils/route_paths/resolver/PageRoutes";
 import { BaseApiServiceImpl } from "../app_utils/api/BaseApiServiceImpl";
 import { MAXIMUM_RECORDS_PER_PAGE } from "../app_utils/constants/Constants";
 import { formatAmountWithCommas } from "../app_utils/utils/Utils";
@@ -98,6 +98,8 @@ const Dashboard = (props: any) => {
   const isRTL = useContext(RTLContext);
   const history = useHistory();
   const [membersCount, setMembersCount] = useState<number>(0);
+  const [pledgeCount, setPledgeCount] = useState<number>(0);
+  const [pledgePaymentsCount, setPledgePaymentsCount] = useState<number>(0);
 
   // Fixed for 6.1.0
   // eslint-disable-next-line
@@ -105,6 +107,8 @@ const Dashboard = (props: any) => {
 
   useEffect(() => {
     fetchRecordsFromServer();
+    fetchPledgeCountFromServer();
+    fetchPledgePaymentCountFromServer();
     setOverviewColors();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -117,6 +121,22 @@ const Dashboard = (props: any) => {
       .catch((error) => {});
   };
 
+  const fetchPledgeCountFromServer = () => {
+    new BaseApiServiceImpl("/api/v1/pledges")
+      .getRequestWithJsonResponse({ offset: 0, limit: MAXIMUM_RECORDS_PER_PAGE })
+      .then(async (response) => {
+        setPledgeCount(response?.totalItems);
+      })
+      .catch((error) => {});
+  };
+  const fetchPledgePaymentCountFromServer = () => {
+    new BaseApiServiceImpl("/api/v1/pledge-payments")
+      .getRequestWithJsonResponse({ offset: 0, limit: MAXIMUM_RECORDS_PER_PAGE })
+      .then(async (response) => {
+        setPledgeCount(response?.totalItems);
+      })
+      .catch((error) => {});
+  };
   const getOverviewColors = () => {
     const isLight = props.colorMode === "light";
     return {
@@ -178,7 +198,12 @@ const Dashboard = (props: any) => {
         </div>
       </div>
 
-      <div className="col-12 md:col-6 lg:col-4">
+      <div
+        className="col-12 md:col-6 lg:col-4"
+        onClick={() => {
+          history.replace(PLEDGES_ROUTE_PATH);
+        }}
+      >
         <div className="card overview-box flex flex-column pt-2">
           <div className="flex align-items-center muted-text">
             <i className="pi pi-bars"></i>
@@ -197,8 +222,8 @@ const Dashboard = (props: any) => {
           </div>
           <div className="flex justify-content-between mt-3 flex-wrap">
             <div className="flex flex-column" style={{ width: "80px" }}>
-              <span className="mb-1 fs-xlarge">0</span>
-              <span className="overview-status p-1 teal-bgcolor fs-small">0 Paid</span>
+              <span className="mb-1 fs-xlarge">{formatAmountWithCommas(pledgeCount, null)}</span>
+              <span className="overview-status p-1 teal-bgcolor fs-small">In Total</span>
             </div>
             <div className="flex align-items-end">
               <Chart type="line" data={overviewChartData2} options={overviewChartOptions} height="60px" width="160px"></Chart>
@@ -207,7 +232,12 @@ const Dashboard = (props: any) => {
         </div>
       </div>
 
-      <div className="col-12 md:col-6 lg:col-4">
+      <div
+        className="col-12 md:col-6 lg:col-4"
+        onClick={() => {
+          history.replace(PLEDGE_PAYMENTS_ROUTE_PATH);
+        }}
+      >
         <div className="card overview-box flex flex-column pt-2">
           <div className="flex align-items-center muted-text">
             <i className="pi pi-dollar"></i>
@@ -226,8 +256,8 @@ const Dashboard = (props: any) => {
           </div>
           <div className="flex justify-content-between mt-3 flex-wrap">
             <div className="flex flex-column" style={{ width: "120px" }}>
-              <span className="mb-1 fs-xlarge">0</span>
-              <span className="overview-status p-1 pink-bgcolor fs-small">0 This month</span>
+              <span className="mb-1 fs-xlarge">{formatAmountWithCommas(pledgePaymentsCount, null)}</span>
+              <span className="overview-status p-1 pink-bgcolor fs-small"> This month</span>
             </div>
             <div className="flex align-items-end">
               <Chart type="line" data={overviewChartData3} options={overviewChartOptions} height="60px" width="160px"></Chart>

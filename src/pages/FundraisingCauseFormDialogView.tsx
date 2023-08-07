@@ -115,7 +115,7 @@ const FundraisingCauseFormDialogView = (props: ModalType) => {
 
     {
       type: FormFieldTypes.DROPDOWN.toString(),
-      label: "Plan Type",
+      label: "Payment Frequency",
       value: recurringPaymentFrequencyId,
       onChange: setRecurringPaymentFrequencyId,
       options: PAYMENT_FREQUENCIES,

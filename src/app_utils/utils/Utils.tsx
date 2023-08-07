@@ -385,3 +385,15 @@ export const sanitizeErrorMessage = (error: any, objectName: string) => {
 export const accountLabelTemplate = (option: any) => {
   return <div>{option?.firstName + " " + option?.lastName}</div>;
 };
+
+export const memberLabelTemplate = (option: any) => {
+  return (
+    <div>
+      <span className=" font-bold"> {option?.fullName}</span>
+      <span className="ml-2 ">Phone:</span>
+      <span className=" font-bold"> {option?.phoneNumber}</span>
+      <span className="ml-2 ">Address:</span>
+      <span className=" font-bold"> {option?.physicalAddress}</span>
+    </div>
+  );
+};
