@@ -5,9 +5,9 @@ import { PrimeIcons } from "primereact/api";
 import { Button } from "primereact/button";
 import { FormFieldTypes } from "../app_utils/constants/FormFieldTypes";
 import { getFormFieldComponent, validateEmptyField } from "../app_utils/components/FormFieldTemplates";
-import { accountLabelTemplate, formatString } from "../app_utils/utils/Utils";
+import { accountLabelTemplate, formatString, memberLabelTemplate } from "../app_utils/utils/Utils";
 import { MISSING_FORM_INPUT_MESSAGE } from "../app_utils/constants/ErrorMessages";
-import { CSS_COL_12, CSS_COL_6, FUNDRAISING_PLAN_TYPES, MAXIMUM_RECORDS_PER_PAGE, PAYMENT_FREQUENCIES } from "../app_utils/constants/Constants";
+import { CSS_COL_12, CSS_COL_6, FUNDRAISING_PLAN_TYPES, MAXIMUM_RECORDS_PER_PAGE, MINIMUM_FILTER_QUERY_LENGTH, PAYMENT_FREQUENCIES } from "../app_utils/constants/Constants";
 import { BaseApiServiceImpl } from "../app_utils/api/BaseApiServiceImpl";
 import { MessageUtils } from "../app_utils/utils/MessageUtils";
 import * as labels from "../app_utils/constants/Labels";
@@ -23,21 +23,16 @@ interface ModalType {
 
 const PledgesFormDialogView = (props: ModalType) => {
   const [id, setId] = useState<number>(0);
-  const [categoryId, setCategoryId] = useState<number>(0);
-  const [name, setName] = useState<string>("string");
-  const [description, setDescription] = useState<string>("string");
-  const [imageUrl, setImageUrl] = useState<string>("string");
-  const [fundraisingPlanTypeId, setFundraisingPlanTypeId] = useState<number>(0);
-  const [minimumContribution, setMinimumContribution] = useState<number>(0);
-  const [fixedOneTimeContribution, setFixedOneTimeContribution] = useState<number>(0);
-  const [targetAmount, setTargetAmount] = useState<number>(0);
-  const [periodicContributionAmount, setPeriodicContributionAmount] = useState<number>(0);
-  const [recurringPaymentFrequencyId, setRecurringPaymentFrequencyId] = useState<number>(0);
+  const [memberId, setMemberId] = useState<number>(0);
+  const [programId, setProgramId] = useState<number>(0);
+  const [amount, setAmount] = useState<number>(0);
+  const [date, setDate] = useState<any>(new Date());
+  const [programs, setPrograms] = useState<any>([]);
+  const [members, setMembers] = useState<any>([]);
 
-  const [categories, setCategories] = useState<any>([]);
-
-  const [isValidNameHint, setIsValidNameHint] = useState<string | null>(null);
-  const [isValidCategoryHint, setIsValidCategoryHint] = useState<string | null>(null);
+  const [isValidMemberIdHint, setIsValidMemberIdHint] = useState<string | null>(null);
+  const [isValidProgramIdHint, setIsValidProgramIdHint] = useState<string | null>(null);
+  const [isValidAmountHint, setIsValidAmountHint] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const message = useRef<any>();
 
@@ -47,20 +42,53 @@ const PledgesFormDialogView = (props: ModalType) => {
    */
   useEffect(() => {
     populateForm(props?.memberObject);
-    fetchCategoriesFromServer();
+    fetchMembersFromServer(props?.memberObject?.memberName);
+    fetchProgramsFromServer(props?.memberObject?.fundraisingCauseName);
   }, [props?.memberObject]);
 
-  const fetchCategoriesFromServer = () => {
-    new BaseApiServiceImpl("/api/v1/lookups/lookup-values")
-      .getRequestWithJsonResponse({ lookupTypeId: 6 })
+  const fetchProgramsFromServer = (searchTerm: any) => {
+    let searchParams: any = { offset: 0, limit: MAXIMUM_RECORDS_PER_PAGE };
+    if (searchTerm != null && searchTerm != undefined) {
+      searchParams.searchTerm = searchTerm;
+    }
+    new BaseApiServiceImpl("/api/v1/fundraising-causes")
+      .getRequestWithJsonResponse(searchParams)
       .then(async (response) => {
-        setCategories(response?.records);
+        setPrograms(response?.records);
       })
       .catch((error) => {
         MessageUtils.showErrorMessage(message, error.message);
       });
   };
 
+  const fetchMembersFromServer = (searchTerm: any) => {
+    let searchParams: any = { offset: 0, limit: MAXIMUM_RECORDS_PER_PAGE };
+    if (searchTerm != null && searchTerm != undefined) {
+      searchParams.searchTerm = searchTerm;
+    }
+
+    new BaseApiServiceImpl("/api/v1/members")
+      .getRequestWithJsonResponse(searchParams)
+      .then(async (response) => {
+        setMembers(response?.records);
+      })
+      .catch((error) => {
+        MessageUtils.showErrorMessage(message, error.message);
+      });
+  };
+  const onMemberFilter = (filterEvent: any) => {
+    const filterTerm = filterEvent.filter;
+    if (filterTerm.length >= MINIMUM_FILTER_QUERY_LENGTH || filterTerm.length % 2 === 0) {
+      fetchMembersFromServer(filterTerm);
+    }
+  };
+
+  const onProgramFilter = (filterEvent: any) => {
+    const filterTerm = filterEvent.filter;
+    if (filterTerm.length >= MINIMUM_FILTER_QUERY_LENGTH || filterTerm.length % 2 === 0) {
+      fetchProgramsFromServer(filterTerm);
+    }
+  };
   /**
    * This clears the form by setting form values to null
    */
@@ -70,7 +98,10 @@ const PledgesFormDialogView = (props: ModalType) => {
 
   const populateForm = (dataObject: any) => {
     setId(dataObject?.id);
-    setName(dataObject?.name);
+    setMemberId(dataObject?.memberId);
+    setProgramId(dataObject?.programId);
+    setAmount(dataObject?.amount);
+    setDate(dataObject?.date);
   };
 
   /**
@@ -78,78 +109,52 @@ const PledgesFormDialogView = (props: ModalType) => {
    */
   let memberFormFields: any = [
     {
-      type: FormFieldTypes.TEXT.toString(),
-      label: "Name",
-      value: name,
-      onChange: setName,
-      setHint: setIsValidNameHint,
-      isValidHint: isValidNameHint,
+      type: FormFieldTypes.DROPDOWN.toString(),
+      label: "Member",
+      value: memberId,
+      onChange: setMemberId,
+      options: members,
+      optionValue: "id",
+      optionLabel: "fullName",
+      onFilter: onMemberFilter,
+      itemTemplate: memberLabelTemplate,
+      setHint: setIsValidMemberIdHint,
+      isValidHint: isValidMemberIdHint,
       validateFieldFn: validateEmptyField,
       width: CSS_COL_6,
     },
 
     {
       type: FormFieldTypes.DROPDOWN.toString(),
-      label: "Category",
-      value: categoryId,
-      onChange: setCategoryId,
-      options: categories,
+      label: "Program",
+      value: programId,
+      onChange: setProgramId,
+      options: programs,
       optionValue: "id",
       optionLabel: "name",
-      setHint: setIsValidCategoryHint,
-      isValidHint: isValidCategoryHint,
+      onFilter: onProgramFilter,
+      setHint: setIsValidProgramIdHint,
+      isValidHint: isValidProgramIdHint,
       validateFieldFn: validateEmptyField,
       width: CSS_COL_6,
     },
 
     {
-      type: FormFieldTypes.DROPDOWN.toString(),
-      label: "Plan Type",
-      value: fundraisingPlanTypeId,
-      onChange: setFundraisingPlanTypeId,
-      options: FUNDRAISING_PLAN_TYPES,
-      optionValue: "id",
-      optionLabel: "name",
+      type: FormFieldTypes.NUMBER.toString(),
+      label: "Amount",
+      value: amount,
+      onChange: setAmount,
       width: CSS_COL_6,
+      setHint: setIsValidAmountHint,
+      isValidHint: isValidAmountHint,
+      validateFieldFn: validateEmptyField,
     },
 
     {
-      type: FormFieldTypes.DROPDOWN.toString(),
-      label: "Plan Type",
-      value: recurringPaymentFrequencyId,
-      onChange: setRecurringPaymentFrequencyId,
-      options: PAYMENT_FREQUENCIES,
-      optionValue: "id",
-      optionLabel: "name",
-      width: CSS_COL_6,
-    },
-
-    {
-      type: FormFieldTypes.NUMBER.toString(),
-      label: "Minimum Contribution",
-      value: minimumContribution,
-      onChange: setMinimumContribution,
-      width: CSS_COL_6,
-    },
-    {
-      type: FormFieldTypes.NUMBER.toString(),
-      label: "Target Amount",
-      value: targetAmount,
-      onChange: setTargetAmount,
-      width: CSS_COL_6,
-    },
-    {
-      type: FormFieldTypes.NUMBER.toString(),
-      label: "Periodic Contribution Amount",
-      value: periodicContributionAmount,
-      onChange: setPeriodicContributionAmount,
-      width: CSS_COL_6,
-    },
-    {
-      type: FormFieldTypes.NUMBER.toString(),
-      label: "Fixed One Time Contribution",
-      value: fixedOneTimeContribution,
-      onChange: setFixedOneTimeContribution,
+      type: FormFieldTypes.DATE.toString(),
+      label: "Date",
+      value: date,
+      onChange: setDate,
       width: CSS_COL_6,
     },
   ];
@@ -198,21 +203,15 @@ const PledgesFormDialogView = (props: ModalType) => {
   const saveMember = () => {
     let memberData: any = {
       id,
-      categoryId,
-      name,
-      description,
-      imageUrl,
-      fundraisingPlanTypeId,
-      minimumContribution,
-      fixedOneTimeContribution,
-      targetAmount,
-      periodicContributionAmount,
-      reccuringPaymentFrequencyId: recurringPaymentFrequencyId, // Correct the typo in field name
+      memberId,
+      fundraisingCauseId: programId,
+      datePledged: date,
+      amount,
     };
 
     if (validateForm()) {
       setIsSaving(true);
-      new BaseApiServiceImpl("/api/v1/fundraising-causes")
+      new BaseApiServiceImpl("/api/v1/pledges")
         .postRequestWithJsonResponse(memberData)
         .then(async (response) => {
           setIsSaving(false);

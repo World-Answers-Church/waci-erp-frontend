@@ -8,4 +8,5 @@ export const LOGIN_ROUTE_PATH = "/";
 export const MEMBERS_ROUTE_PATH = "/members";
 export const FUNDRAISINGS_ROUTE_PATH = "/fundraisings";
 export const PLEDGES_ROUTE_PATH = "/pledges";
+export const PLEDGE_PAYMENTS_ROUTE_PATH = "/pledge-payments";
 export const USERS_ROUTE_PATH = "/users";
