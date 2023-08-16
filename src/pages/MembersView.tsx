@@ -203,7 +203,7 @@ const MembersView = () => {
    */
   const filterButtonsTemplate = (
     <>
-      <div className="col-2 p-fluid" key="filterBtns">
+      <div className="col-6  md:col-2 p-fluid" key="filterBtns">
         <Button icon={constants.ICON_SEARCH} className={constants.CSS_FILTER_SUBMIT_BUTTON} onClick={onSubmitFilter} loading={isLoading} />
         <Button icon={constants.ICON_REFRESH} className={constants.CSS_FILTER_RESET_BUTTON} onClick={resetFilters} loading={isLoading} />
       </div>
@@ -282,7 +282,7 @@ const MembersView = () => {
       </div>
       <div className="col-12">
         <div className="card">
-          <DataTable value={records} paginator={false} className="datatable-responsive" paginatorPosition="both" emptyMessage="No record found." loading={isLoading}>
+          <DataTable responsiveLayout="stack" value={records} paginator={false} className="datatable-responsive" paginatorPosition="both" emptyMessage="No record found." loading={isLoading}>
             <Column field="Index" header="#" style={{ width: "70px" }} body={rowIndexTemplate}></Column>
             <Column field="fullName" header={"Full Name"}></Column>
             <Column field="phoneNumber" header={"Phone Number"}></Column>

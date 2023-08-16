@@ -210,7 +210,7 @@ const UsersView = () => {
    */
   const filterButtonsTemplate = (
     <>
-      <div className="col-2 p-fluid" key="filterBtns">
+      <div className="col-6  md:col-2 p-fluid" key="filterBtns">
         <Button icon={constants.ICON_SEARCH} className={constants.CSS_FILTER_SUBMIT_BUTTON} onClick={onSubmitFilter} loading={isLoading} />
         <Button icon={constants.ICON_REFRESH} className={constants.CSS_FILTER_RESET_BUTTON} onClick={resetFilters} loading={isLoading} />
       </div>
