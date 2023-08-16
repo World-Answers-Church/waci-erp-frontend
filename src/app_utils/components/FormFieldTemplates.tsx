@@ -90,6 +90,7 @@ export function getFormFieldComponent(formField: any) {
               id={formField?.id}
               className="w-full"
               value={formField?.value}
+              onFilter={formField?.onFilter}
               options={formField?.options}
               optionLabel={formField?.optionLabel}
               optionValue={formField?.optionValue}
@@ -112,6 +113,7 @@ export function getFormFieldComponent(formField: any) {
               className="w-full"
               value={formField?.value}
               options={formField?.options}
+              onFilter={formField?.onFilter}
               optionLabel={formField?.optionLabel}
               optionValue={formField?.optionValue}
               itemTemplate={formField?.itemTemplate}
@@ -140,6 +142,7 @@ export function getFormFieldComponent(formField: any) {
               id={formField?.id}
               className="w-full"
               value={formField?.value}
+              onFilter={formField?.onFilter}
               options={formField?.options}
               optionLabel={formField?.optionLabel}
               optionValue={formField?.optionValue}
@@ -163,6 +166,7 @@ export function getFormFieldComponent(formField: any) {
               className="w-full"
               value={formField?.value}
               options={formField?.options}
+              onFilter={formField?.onFilter}
               optionLabel={formField?.optionLabel}
               optionValue={formField?.optionValue}
               onChange={(e) => {
