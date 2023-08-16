@@ -397,3 +397,31 @@ export const memberLabelTemplate = (option: any) => {
     </div>
   );
 };
+
+/**
+ * Removes white spaces from a string
+ * @param anyString
+ * @returns
+ */
+export function removeWhiteSpaces(anyString: string) {
+  if (anyString == null) {
+    return null;
+  }
+  return anyString.replace(/\s/g, "").toLocaleLowerCase();
+}
+
+/**
+ * Cleans a string into the css style class name format
+ * @param anyString
+ * @returns
+ */
+export function toStyleClassName(anyString: string) {
+  if (anyString == null) {
+    return null;
+  }
+  return removeWhiteSpaces(anyString)?.toLocaleLowerCase();
+}
+
+export const generalStatusBodyTemplate = (status: string) => {
+  return <span className={`status-badge status-${toStyleClassName(status)}`}>{status}</span>;
+};
