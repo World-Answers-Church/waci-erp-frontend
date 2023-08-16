@@ -15,7 +15,7 @@ import { HOME_ROUTE_PATH } from "../app_utils/route_paths/resolver/PageRoutes";
 import { PrimeIcons } from "primereact/api";
 import { BaseApiServiceImpl } from "../app_utils/api/BaseApiServiceImpl";
 import { MessageUtils } from "../app_utils/utils/MessageUtils";
-import { replaceWithUnderscore, toReadableDate } from "../app_utils/utils/Utils";
+import { generalStatusBodyTemplate, replaceWithUnderscore, toReadableDate } from "../app_utils/utils/Utils";
 import { getFilterComponent } from "../app_utils/components/Filters";
 import { paginatorTemplate } from "../app_utils/components/PaginatorTemplate";
 import { filtersHeadertemplate } from "../app_utils/components/FiltersPanelHeader";
@@ -186,7 +186,7 @@ const MembersView = () => {
    * @returns
    */
   const statusBodyTemplate = (rowData: any) => {
-    return <span className={`status-badge status-${rowData?.recordStatus?.toLowerCase()}`}>{rowData?.recordStatus}</span>;
+    return generalStatusBodyTemplate(rowData?.recordStatus);
   };
 
   /**

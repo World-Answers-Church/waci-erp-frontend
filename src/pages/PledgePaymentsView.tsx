@@ -22,8 +22,9 @@ import { filtersHeadertemplate } from "../app_utils/components/FiltersPanelHeade
 import MemberFormDialogView from "./MemberFormDialogView";
 import FundraisingCauseFormDialogView from "./FundraisingCauseFormDialogView";
 import PledgesFormDialogView from "./PledgesFormDialogView";
+import PledgePaymentFormDialogView from "./PledgePaymentFormDialogView";
 
-const PledgesView = () => {
+const PledgePaymentsView = () => {
   const [records, setRecords] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchTermFilter, setSearchTermFilter] = useState<string | null>(null);
@@ -54,7 +55,7 @@ const PledgesView = () => {
 
   const breadcrumbItems = [
     {
-      label: `Pledges`,
+      label: `Pledges Payments`,
       icon: PrimeIcons.FLAG,
     },
   ];
@@ -79,7 +80,7 @@ const PledgesView = () => {
     setIsLoading(true);
     let searchParameters: any = getQueryParameters();
 
-    new BaseApiServiceImpl("/api/v1/pledges")
+    new BaseApiServiceImpl("/api/v1/pledge-payments")
       .getRequestWithJsonResponse(searchParameters)
       .then(async (response) => {
         setIsLoading(false);
@@ -201,7 +202,7 @@ const PledgesView = () => {
    * @returns
    */
   const statusBodyTemplate = (rowData: any) => {
-    return generalStatusBodyTemplate(rowData?.statusName);
+    return generalStatusBodyTemplate(rowData?.recordStatus);
   };
 
   /**
@@ -284,7 +285,7 @@ const PledgesView = () => {
         <BreadCrumb home={breadcrumbHome} model={breadcrumbItems} />
       </div>
       <div className="col-6 flex justify-content-end flex-wrap">
-        <Button label={"Add Pledge"} icon={PrimeIcons.PLUS} className="p-button-secondary" onClick={openNewFormDialog} />
+        <Button label={"Register Pledge Payment"} icon={PrimeIcons.PLUS} className="p-button-secondary" onClick={openNewFormDialog} />
       </div>
       <Messages ref={message} style={{ width: "100%" }} />
       <div className="col-12">
@@ -300,9 +301,9 @@ const PledgesView = () => {
           <DataTable value={records} paginator={false} className="datatable-responsive" paginatorPosition="both" emptyMessage="No record found." loading={isLoading}>
             <Column field="Index" header="#" style={{ width: "70px" }} body={rowIndexTemplate}></Column>
             <Column field="memberName" header={"Member"}></Column>
-            <Column field="fundraisingCauseName" header={"Programme"}></Column>
+            <Column field="programName" header={"Programme"}></Column>
             <Column field="amount" header={"Amount"}></Column>
-            <Column field="date" header={"Date"}></Column>
+            <Column field="datePaid" header={"Date"}></Column>
             <Column header={labels.LABEL_STATUS} body={statusBodyTemplate}></Column>
             <Column style={{ width: "120px" }} header="Actions" body={actionBodyTemplate}></Column>
           </DataTable>
@@ -310,9 +311,9 @@ const PledgesView = () => {
           <Paginator first={first} rows={constants.MAXIMUM_RECORDS_PER_PAGE} totalRecords={totalItems} alwaysShow={true} onPageChange={onPageChange} template={paginatorTemplate} />
         </div>
       </div>
-      <PledgesFormDialogView isOpen={openDialog} toggle={toggleOpenDialog} messageRef={message} memberObject={selectedMember} reloadFn={fetchRecordsFromServer}></PledgesFormDialogView>
+      <PledgePaymentFormDialogView isOpen={openDialog} toggle={toggleOpenDialog} messageRef={message} paymentObject={selectedMember} reloadFn={fetchRecordsFromServer}></PledgePaymentFormDialogView>
     </div>
   );
 };
 
-export default PledgesView;
+export default PledgePaymentsView;
