@@ -99,7 +99,7 @@ const PledgesFormDialogView = (props: ModalType) => {
   const populateForm = (dataObject: any) => {
     setId(dataObject?.id);
     setMemberId(dataObject?.memberId);
-    setProgramId(dataObject?.programId);
+    setProgramId(dataObject?.fundraisingCauseId);
     setAmount(dataObject?.amount);
     setDate(dataObject?.date);
   };
@@ -202,7 +202,7 @@ const PledgesFormDialogView = (props: ModalType) => {
    */
   const saveMember = () => {
     let memberData: any = {
-      id,
+      id: id,
       memberId,
       fundraisingCauseId: programId,
       datePledged: date,
