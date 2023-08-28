@@ -3,6 +3,7 @@ import { Button } from "primereact/button";
 import { useHistory } from "react-router-dom";
 import { MAXIMUM_RECORDS_PER_PAGE } from "../app_utils/constants/Constants";
 import { BaseApiServiceImpl } from "../app_utils/api/BaseApiServiceImpl";
+import { LOGIN_ROUTE_PATH } from "../app_utils/route_paths/resolver/PageRoutes";
 
 const Landing = () => {
   const history = useHistory();
@@ -97,18 +98,22 @@ const Landing = () => {
           </ul>
         </div>
 
-        <div className="header-text flex flex-column align-items-center justify-content-center">
-          <h1 className="mb-6 white-color">Your application slogan comes here</h1>
-          <Button type="button" label="Sign Up Now" className="p-button-secondary"></Button>
+        <div className="header-text flex flex-column align-items-center justify-content-center ">
+          <h1 className="mb-6 white-color">Your All-in-One Church Management Solution</h1>
+          <div className="grid ">
+            <div className="col-6 ">
+              <Button onClick={() => history.push(LOGIN_ROUTE_PATH)} type="button" label="Sign Up" className="p-button-secondary mx-2 "></Button>
+            </div>
+            <div className="col-6">
+              <Button onClick={() => history.push(LOGIN_ROUTE_PATH)} type="button" label="Login" className="p-button-secondary  mx-2 "></Button>
+            </div>
+          </div>
         </div>
       </div>
 
       <div id="features" className="section flex flex-column align-items-center">
-        <h2>The Ultimate Material Application Template for PrimeReact</h2>
-        <p className="text-center">
-          PrimeReact is a collection of rich UI components for Angular. PrimeReact is developed by PrimeTek Informatics, a vendor with years of expertise in developing open source UI solutions.
-          Allocate your valuable time on business logic rather than dealing with the complex user interface requirements.
-        </p>
+        <h2>Streamline Church Management with Our SaaS Application</h2>
+        <p className="text-center">Effortlessly manage data, engage with members, and enhance communication. </p>
 
         <div className="grid mt-3 mx-0">
           <div className="col-12 md:col-4 text-center">
@@ -298,7 +303,7 @@ const Landing = () => {
       </div>
 
       <div id="footer" className="section flex align-items-center justify-content-between flex-column lg:flex-row">
-        <p>PrimeReact ULTIMA</p>
+        <p>Church Saas</p>
 
         <div className="py-3 flex align-items-center">
           <ul className="my-3 mx-6">

@@ -23,6 +23,8 @@ const AppWrapper = (props: any) => {
 
     case "/landing":
       return <Route path="/landing" component={Landing} />;
+    case "/":
+      return <Route path="/" component={Landing} />;
     default:
       return <App />;
   }
