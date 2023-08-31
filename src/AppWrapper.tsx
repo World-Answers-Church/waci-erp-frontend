@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Error from "./pages/Error";
 import NotFound from "./pages/NotFound";
 import Landing from "./pages/Landing";
+import RegisterOrganisationForm from "./pages/RegisterOrganisationForm";
 
 const AppWrapper = (props: any) => {
   let location = useLocation();
@@ -16,6 +17,8 @@ const AppWrapper = (props: any) => {
   switch (props.location.pathname) {
     case "/login":
       return <Route path="/login" component={Login} />;
+    case "/register":
+      return <Route path="/register" component={RegisterOrganisationForm} />;
     case "/error":
       return <Route path="/error" component={Error} />;
     case "/notfound":

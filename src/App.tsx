@@ -19,6 +19,7 @@ import "./App.scss";
 import { ID_LAYOUT_CONTENT, KEY_BEARER_TOKEN, KEY_SELECTED_APPLICATION_MODULE } from "./app_utils/constants/Constants";
 import { MainFrontendRoutes } from "./app_utils/route_paths/resolver/MainFrontendRoutes";
 import Login from "./pages/Login";
+import RegisterOrganisationForm from "./pages/RegisterOrganisationForm";
 
 export const RTLContext = React.createContext(false);
 
@@ -302,7 +303,11 @@ const App = () => {
     "layout-rtl": isRTL,
   });
   if (!token) {
+
+    console.log("Current path>>>>>>>>"+ window.location.pathname)
+    
     return <Login />;
+    
   }
 
   return (

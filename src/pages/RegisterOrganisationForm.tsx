@@ -13,6 +13,7 @@ import { MessageUtils } from "../app_utils/utils/MessageUtils";
 import * as labels from "../app_utils/constants/Labels";
 
 import { Card } from "primereact/card";
+import { useHistory } from "react-router-dom";
 
 interface SignUpFormData {
   name: string;
@@ -46,12 +47,13 @@ const RegisterOrganisationForm = () => {
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const message = useRef<any>();
 
+  const history = useHistory();
   /**
    * This hook is called when the object is changed. This happens
    * in the parent view when the is changed
    */
   useEffect(() => {
-    fetchCategoriesFromServer();
+  fetchCategoriesFromServer();
   }, []);
 
   /**
@@ -61,8 +63,8 @@ const RegisterOrganisationForm = () => {
     populateForm(null);
   };
   const fetchCategoriesFromServer = () => {
-    new BaseApiServiceImpl("/api/v1/lookups/genders")
-      .getRequestWithJsonResponse({})
+    new BaseApiServiceImpl("/api/v1/lookups/lookup-values")
+      .getRequestWithJsonResponse({offset:0,limit:MAXIMUM_RECORDS_PER_PAGE,lookupTypeId:7})
       .then(async (response) => {
         setCategories(response?.records);
       })
@@ -134,7 +136,7 @@ const RegisterOrganisationForm = () => {
       onChange: setCategoryId,
       options: categories,
       optionValue: "id",
-      optionLabel: "name",
+      optionLabel: "value",
       width: CSS_COL_6,
     },
     {
@@ -217,7 +219,10 @@ const RegisterOrganisationForm = () => {
   /**
    * This closes the dialog
    */
-  const closeDialog = () => {};
+  const closeDialog = () => {
+history.goBack();
+
+  };
 
   /**
    * This is the footer of the modal dialog
@@ -230,17 +235,27 @@ const RegisterOrganisationForm = () => {
   );
 
   return (
-    <div className="p-d-flex p-jc-center p-ai-center">
-      <Card>
-        <h2>Sign Up</h2>
-        <Messages ref={message} />
-        <div className="grid">
+    <div className="pages-body login-page flex flex-column">
+      <div className="align-self-center mt-auto mb-auto">
+        <div className="pages-panel card flex flex-column m-5">
+          <div className="pages-header px-3 py-1">
+            <h2>Register Organisation</h2>
+          </div>
+
+          <div className="pages-detail mb-6 px-6">Register On our platform</div>
+
+          <div className="input-panel flex flex-column px-3 grid"></div>
+      
           <div className="col-12">
             <Messages ref={message} style={{ width: "100%" }} />
           </div>
+          <div className="col-12 p-9 grid">
           {organisationFields}
-        </div>
-      </Card>
+          {organisationDetailsDialogFooter}
+          </div>
+        
+    </div>
+    </div>
     </div>
   );
 };

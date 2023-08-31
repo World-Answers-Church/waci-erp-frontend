@@ -3,7 +3,7 @@ import { Button } from "primereact/button";
 import { useHistory } from "react-router-dom";
 import { MAXIMUM_RECORDS_PER_PAGE } from "../app_utils/constants/Constants";
 import { BaseApiServiceImpl } from "../app_utils/api/BaseApiServiceImpl";
-import { LOGIN_ROUTE_PATH } from "../app_utils/route_paths/resolver/PageRoutes";
+import { LOGIN_ROUTE_PATH, REGISTER_ORGANISATION_ROUTE_PATH } from "../app_utils/route_paths/resolver/PageRoutes";
 
 const Landing = () => {
   const history = useHistory();
@@ -101,11 +101,11 @@ const Landing = () => {
         <div className="header-text flex flex-column align-items-center justify-content-center ">
           <h1 className="mb-6 white-color">Your All-in-One Church Management Solution</h1>
           <div className="grid ">
-            <div className="col-6 ">
-              <Button onClick={() => history.push(LOGIN_ROUTE_PATH)} type="button" label="Sign Up" className="p-button-secondary mx-2 "></Button>
+            <div className="col-6 w-20rem">
+              <Button onClick={() => history.push(REGISTER_ORGANISATION_ROUTE_PATH)} type="button" label="Sign Up" className="p-button-secondary "></Button>
             </div>
-            <div className="col-6">
-              <Button onClick={() => history.push(LOGIN_ROUTE_PATH)} type="button" label="Login" className="p-button-secondary  mx-2 "></Button>
+            <div className="col-6 w-20rem">
+              <Button onClick={() => history.push(LOGIN_ROUTE_PATH)} type="button" label="Login" className="p-button-secondary "></Button>
             </div>
           </div>
         </div>
