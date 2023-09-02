@@ -42,7 +42,6 @@ export class NormalUserRoutes extends BaseFrontendRoutes {
       menuItems.push({ label: "Users", icon: PrimeIcons.USERS, to: USERS_ROUTE_PATH, exact: true });
       menuItems.push({ label: "Organisations", icon: PrimeIcons.BUILDING, to: ORGANISATIONS_ROUTE_PATH, exact: true });
       menuItems.push({ label: "Lookups", icon: PrimeIcons.BARS, to: LOOKUPSROUTE_PATH, exact: true });
-  
     }
     navigationMenu.push({ items: menuItems });
     return navigationMenu;
@@ -62,8 +61,6 @@ export class NormalUserRoutes extends BaseFrontendRoutes {
       routes.push({ path: USERS_ROUTE_PATH, label: "Users", component: UsersView, exact: true });
       routes.push({ path: ORGANISATIONS_ROUTE_PATH, label: "Organisations", component: OrganisationsView, exact: true });
       routes.push({ path: LOOKUPSROUTE_PATH, label: "LookupsView", component: LookupsView, exact: true });
-  
-  
     }
     return routes;
   }

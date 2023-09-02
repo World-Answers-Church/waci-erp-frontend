@@ -4,10 +4,17 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import { PrimeIcons } from "primereact/api";
 import { Button } from "primereact/button";
 import { FormFieldTypes } from "../app_utils/constants/FormFieldTypes";
-import { getFormFieldComponent, validateEmptyField } from "../app_utils/components/FormFieldTemplates";
+import {
+  getFormFieldComponent,
+  validateEmptyField,
+} from "../app_utils/components/FormFieldTemplates";
 import { accountLabelTemplate, formatString } from "../app_utils/utils/Utils";
 import { MISSING_FORM_INPUT_MESSAGE } from "../app_utils/constants/ErrorMessages";
-import { CSS_COL_12, CSS_COL_6, MAXIMUM_RECORDS_PER_PAGE } from "../app_utils/constants/Constants";
+import {
+  CSS_COL_12,
+  CSS_COL_6,
+  MAXIMUM_RECORDS_PER_PAGE,
+} from "../app_utils/constants/Constants";
 import { BaseApiServiceImpl } from "../app_utils/api/BaseApiServiceImpl";
 import { MessageUtils } from "../app_utils/utils/MessageUtils";
 import * as labels from "../app_utils/constants/Labels";
@@ -28,6 +35,7 @@ interface SignUpFormData {
   logoUrl: string;
 }
 const RegisterOrganisationForm = () => {
+  const [signUpSuccessfull, setSignUpSuccessfull] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [code, setCode] = useState<string>("");
   const [emailAddress, setEmailAddress] = useState<string>("");
@@ -53,7 +61,7 @@ const RegisterOrganisationForm = () => {
    * in the parent view when the is changed
    */
   useEffect(() => {
-  fetchCategoriesFromServer();
+    fetchCategoriesFromServer();
   }, []);
 
   /**
@@ -64,7 +72,11 @@ const RegisterOrganisationForm = () => {
   };
   const fetchCategoriesFromServer = () => {
     new BaseApiServiceImpl("/api/v1/lookups/lookup-values")
-      .getRequestWithJsonResponse({offset:0,limit:MAXIMUM_RECORDS_PER_PAGE,lookupTypeId:7})
+      .getRequestWithJsonResponse({
+        offset: 0,
+        limit: MAXIMUM_RECORDS_PER_PAGE,
+        lookupTypeId: 7,
+      })
       .then(async (response) => {
         setCategories(response?.records);
       })
@@ -152,9 +164,11 @@ const RegisterOrganisationForm = () => {
    * This loops through the organisation object fields array to create the fields elements for
    * display
    */
-  let organisationFields = organisationFormFields.map((organisationObjectField: any) => {
-    return getFormFieldComponent(organisationObjectField);
-  });
+  let organisationFields = organisationFormFields.map(
+    (organisationObjectField: any) => {
+      return getFormFieldComponent(organisationObjectField);
+    }
+  );
 
   /**
    * This clears the hint messages
@@ -177,9 +191,16 @@ const RegisterOrganisationForm = () => {
     let isFormValid: boolean = true;
 
     organisationFormFields.forEach((formField: any) => {
-      if (formField.setHint && (formField.value === null || formField.value === "" || formField.value === undefined)) {
+      if (
+        formField.setHint &&
+        (formField.value === null ||
+          formField.value === "" ||
+          formField.value === undefined)
+      ) {
         isFormValid = false;
-        formField.setHint(formatString(MISSING_FORM_INPUT_MESSAGE, formField.label));
+        formField.setHint(
+          formatString(MISSING_FORM_INPUT_MESSAGE, formField.label)
+        );
       }
     });
 
@@ -207,6 +228,7 @@ const RegisterOrganisationForm = () => {
         .postRequestWithJsonResponse(organisationData)
         .then(async (response) => {
           setIsSaving(false);
+          setSignUpSuccessfull(true);
           clearForm();
         })
         .catch((error) => {
@@ -220,42 +242,78 @@ const RegisterOrganisationForm = () => {
    * This closes the dialog
    */
   const closeDialog = () => {
-history.goBack();
-
+    history.goBack();
   };
 
   /**
    * This is the footer of the modal dialog
    */
   const organisationDetailsDialogFooter = (
-    <>
-      <Button label={labels.LABEL_CANCEL} icon={PrimeIcons.TIMES} className="p-button-text" onClick={closeDialog} />
-      <Button label={labels.LABEL_SAVE} icon={PrimeIcons.SAVE} className="p-button-secondary" onClick={saveOrganisation} loading={isSaving} />
-    </>
+    <div className="w-full grid">
+      <div className="col-6 pr-1">
+        <Button
+          label={labels.LABEL_CANCEL}
+          icon={PrimeIcons.TIMES}
+          className="p-button-outlined w-full"
+          onClick={closeDialog}
+        />
+      </div>
+      <div className="col-6 pl-1">
+        <Button
+          label={labels.LABEL_SAVE}
+          icon={PrimeIcons.SAVE}
+          className="p-button-secondary w-full"
+          onClick={saveOrganisation}
+          loading={isSaving}
+        />
+      </div>
+    </div>
   );
 
   return (
-    <div className="pages-body login-page flex flex-column">
-      <div className="align-self-center mt-auto mb-auto">
-        <div className="pages-panel card flex flex-column m-5">
-          <div className="pages-header px-3 py-1">
-            <h2>Register Organisation</h2>
-          </div>
+    <div className="pages-body  flex flex-column grid">
+      <div className="col-12 md:col-6 align-self-center mt-auto mb-auto">
+        {signUpSuccessfull !== true && (
+          <div className="pages-panel card flex flex-column m-5 grid">
+            <div className="px-3 py-1">
+              <h2>Register Organisation</h2>
+            </div>
 
-          <div className="pages-detail mb-6 px-6">Register On our platform</div>
+            <div className="pages-detail mb-6 px-6">
+              Register On our platform
+            </div>
 
-          <div className="input-panel flex flex-column px-3 grid"></div>
-      
-          <div className="col-12">
-            <Messages ref={message} style={{ width: "100%" }} />
+            <div className="input-panel flex flex-column px-3 grid"></div>
+
+            <div className="col-12">
+              <Messages ref={message} style={{ width: "100%" }} />
+            </div>
+            <div className="col-12 p-9 align-self-left grid">
+              {organisationFields}
+              <div className="col-12 w-full">
+                {organisationDetailsDialogFooter}
+              </div>
+            </div>
           </div>
-          <div className="col-12 p-9 grid">
-          {organisationFields}
-          {organisationDetailsDialogFooter}
+        )}
+
+        {signUpSuccessfull === true && (
+          <div className="pages-panel card flex flex-column m-5 grid">
+            <div className="px-3 py-1">
+              <h2>Register Organisation</h2>
+            </div>
+
+            <div className="pages-detail mb-6 px-6">
+              Register On our platform
+            </div>
+
+            <div className="input-panel flex flex-column px-3 grid">
+              Registration Successfull, please log into your account with
+              Organisation Code: Your Organisation Code Username: Password:
+            </div>
           </div>
-        
-    </div>
-    </div>
+        )}
+      </div>
     </div>
   );
 };
