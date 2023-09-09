@@ -4,9 +4,10 @@ import { UserSessionUtils } from "../../utils/UserSessionUtils";
 import { arrayContains } from "../../utils/Utils";
 import Login from "../../../pages/Login";
 import { NormalUserRoutes } from "./NormalUserRoutes";
-import { HOME_ROUTE_PATH, LOGIN_ROUTE_PATH } from "./PageRoutes";
+import { HOME_ROUTE_PATH, LANDING_ROUTE_PATH, LOGIN_ROUTE_PATH, REGISTER_ORGANISATION_ROUTE_PATH } from "./PageRoutes";
 import Landing from "../../../pages/Landing";
 import Dashboard from "../../../pages/Dashboard";
+import RegisterOrganisationForm from "../../../pages/RegisterOrganisationForm";
 export class MainFrontendRoutes {
   /**
    * Start of module section handler attributes
@@ -45,7 +46,10 @@ export class MainFrontendRoutes {
    * @returns
    */
   getMainUnAuthenticatedNavigationMenu() {
-    return [{ label: "Login", icon: PrimeIcons.SIGN_IN, to: LOGIN_ROUTE_PATH }];
+    return [
+      { label: "Login", icon: PrimeIcons.SIGN_IN, to: LOGIN_ROUTE_PATH },
+      { label: "Landing", icon: PrimeIcons.SIGN_IN, to: LANDING_ROUTE_PATH },
+    ];
   }
 
   /**
@@ -61,7 +65,11 @@ export class MainFrontendRoutes {
    * @returns
    */
   getUnAuthenticatedComponetRouters() {
-    return [{ path: HOME_ROUTE_PATH, label: "Dashboard", component: Dashboard, exact: true }];
+    return [
+      { path: LOGIN_ROUTE_PATH, label: "Login", component: Login, exact: true },
+      { path: LANDING_ROUTE_PATH, label: "Landing", component: Landing, exact: true },
+      { path: REGISTER_ORGANISATION_ROUTE_PATH, label: "RegisterOrganisationForm", component: RegisterOrganisationForm, exact: true },
+    ];
   }
 
   /**
@@ -71,7 +79,8 @@ export class MainFrontendRoutes {
   getAuthenticatedRoutes() {
     return [
       { path: LOGIN_ROUTE_PATH, label: "Login", component: Login, exact: true },
-      { path: HOME_ROUTE_PATH, label: "Login", component: Dashboard, exact: true },
+      { path: HOME_ROUTE_PATH, label: "Dashboard", component: Dashboard, exact: true },
+      { path: REGISTER_ORGANISATION_ROUTE_PATH, label: "RegisterOrganisationForm", component: RegisterOrganisationForm, exact: true },
     ];
   }
 }

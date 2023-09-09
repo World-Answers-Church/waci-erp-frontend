@@ -100,7 +100,36 @@ export const PAYMENT_FREQUENCIES = [
     name: "YEARLY",
   },
 ];
-
+export const LOOKUP_YPES = [
+  {
+    id: 1,
+    name: "Prayer Request Types",
+  },
+  {
+    id: 2,
+    name: "Testimony Types",
+  },
+  {
+    id: 3,
+    name: "Salutations",
+  },
+  {
+    id: 4,
+    name: "Prophecy Types",
+  },
+  {
+    id: 5,
+    name: "Occupation Types",
+  },
+  {
+    id: 6,
+    name: "Fundraising Categories",
+  },
+  {
+    id: 7,
+    name: "Organisation Categories",
+  },
+];
 // Supported Countries
 export const SupportedTerritories = [
   { territory: "Uganda", countryIsoCode: "UG" },

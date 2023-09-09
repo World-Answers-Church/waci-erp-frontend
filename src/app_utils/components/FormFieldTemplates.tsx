@@ -41,8 +41,8 @@ export function validateEmptyField(value: any, setHint: any, label: string) {
  * @param formField
  */
 export function getFormFieldComponent(formField: any) {
+  formField.id = formField.label;
   if (formField?.type === FormFieldTypes.TEXT.toString()) {
-    formField.id = formField.label;
     return (
       <div key={formField?.id} className={`field col-12 md:${formField?.width !== null || formField?.width !== undefined ? formField?.width : "col-12"}`}>
         <label htmlFor={formField?.id} className="font-bold">
