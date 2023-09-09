@@ -1,6 +1,5 @@
-import { Dialog } from "primereact/dialog";
 import { Messages } from "primereact/messages";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PrimeIcons } from "primereact/api";
 import { Button } from "primereact/button";
 import { FormFieldTypes } from "../app_utils/constants/FormFieldTypes";
@@ -8,19 +7,17 @@ import {
   getFormFieldComponent,
   validateEmptyField,
 } from "../app_utils/components/FormFieldTemplates";
-import { accountLabelTemplate, formatString } from "../app_utils/utils/Utils";
+import { formatString } from "../app_utils/utils/Utils";
 import { MISSING_FORM_INPUT_MESSAGE } from "../app_utils/constants/ErrorMessages";
 import {
-  CSS_COL_12,
   CSS_COL_6,
-  MAXIMUM_RECORDS_PER_PAGE,
 } from "../app_utils/constants/Constants";
 import { BaseApiServiceImpl } from "../app_utils/api/BaseApiServiceImpl";
 import { MessageUtils } from "../app_utils/utils/MessageUtils";
 import * as labels from "../app_utils/constants/Labels";
 
-import { Card } from "primereact/card";
 import { useHistory } from "react-router-dom";
+import { LOGIN_ROUTE_PATH } from "../app_utils/route_paths/resolver/PageRoutes";
 
 interface SignUpFormData {
   name: string;
@@ -39,8 +36,6 @@ const RegisterOrganisationForm = () => {
   const [name, setName] = useState<string>("");
   const [code, setCode] = useState<string>("");
   const [emailAddress, setEmailAddress] = useState<string>("");
-  const [categories, setCategories] = useState<string>("");
-  const [categoryId, setCategoryId] = useState<string>("");
   const [website, setWebsite] = useState<string>("");
   const [physicalAddress, setPhysicalAddress] = useState<string>("");
   const [primaryPhoneNumber, setPrimaryPhoneNumber] = useState<string>("");
@@ -61,7 +56,6 @@ const RegisterOrganisationForm = () => {
    * in the parent view when the is changed
    */
   useEffect(() => {
-    fetchCategoriesFromServer();
   }, []);
 
   /**
@@ -70,21 +64,7 @@ const RegisterOrganisationForm = () => {
   const clearForm = () => {
     populateForm(null);
   };
-  const fetchCategoriesFromServer = () => {
-    new BaseApiServiceImpl("/api/v1/lookups/lookup-values")
-      .getRequestWithJsonResponse({
-        offset: 0,
-        limit: MAXIMUM_RECORDS_PER_PAGE,
-        lookupTypeId: 7,
-      })
-      .then(async (response) => {
-        setCategories(response?.records);
-      })
-      .catch((error) => {
-        MessageUtils.showErrorMessage(message, error.message);
-      });
-  };
-
+  
   const populateForm = (dataObject: any) => {
     setName(dataObject?.name);
     setCode(dataObject?.code);
@@ -98,7 +78,7 @@ const RegisterOrganisationForm = () => {
   let organisationFormFields: any = [
     {
       type: FormFieldTypes.TEXT.toString(),
-      label: "Name",
+      label: "Church Name",
       value: name,
       onChange: setName,
       setHint: setIsValidNameHint,
@@ -108,8 +88,9 @@ const RegisterOrganisationForm = () => {
     },
     {
       type: FormFieldTypes.TEXT.toString(),
-      label: "Code",
+      label: "Church Short Name",
       value: code,
+      hint:"(3 to 5 characters)",
       onChange: setCode,
       setHint: setIsValidCodeHint,
       isValidHint: isValidCodeHint,
@@ -139,24 +120,18 @@ const RegisterOrganisationForm = () => {
       label: "Email Address",
       value: emailAddress,
       onChange: setEmailAddress,
+      setHint: setIsValidEmailHint,
+      isValidHint: isValidEmailHint,
+      validateFieldFn: validateEmptyField,
       width: CSS_COL_6,
     },
-    {
-      type: FormFieldTypes.DROPDOWN.toString(),
-      label: "Category",
-      value: categoryId,
-      onChange: setCategoryId,
-      options: categories,
-      optionValue: "id",
-      optionLabel: "value",
-      width: CSS_COL_6,
-    },
+   
     {
       type: FormFieldTypes.TEXT.toString(),
       label: "Website",
       value: website,
       onChange: setWebsite,
-      width: CSS_COL_12,
+      width: CSS_COL_6,
     },
   ];
 
@@ -217,7 +192,6 @@ const RegisterOrganisationForm = () => {
       emailAddress: emailAddress,
       code: code,
       physicalAddress: physicalAddress,
-      categoryId: categoryId,
       otherPhoneNumber: otherPhoneNumber,
       logoUrl: logoUrl,
     };
@@ -256,6 +230,7 @@ const RegisterOrganisationForm = () => {
           icon={PrimeIcons.TIMES}
           className="p-button-outlined w-full"
           onClick={closeDialog}
+          loading={isSaving}
         />
       </div>
       <div className="col-6 pl-1">
@@ -276,10 +251,10 @@ const RegisterOrganisationForm = () => {
         {signUpSuccessfull !== true && (
           <div className="pages-panel card flex flex-column m-5 grid">
             <div className="px-3 py-1">
-              <h2>Register Organisation</h2>
+              <h2>Register Church</h2>
             </div>
 
-            <div className="pages-detail mb-6 px-6">
+            <div className="pages-detail mb-4 px-6">
               Register On our platform
             </div>
 
@@ -300,16 +275,16 @@ const RegisterOrganisationForm = () => {
         {signUpSuccessfull === true && (
           <div className="pages-panel card flex flex-column m-5 grid">
             <div className="px-3 py-1">
-              <h2>Register Organisation</h2>
+              <h2>Register Church</h2>
             </div>
 
-            <div className="pages-detail mb-6 px-6">
-              Register On our platform
+            <div className="pages-detail mb-2 px-1">
+           <h1> 🎉</h1>
             </div>
 
             <div className="input-panel flex flex-column px-3 grid">
-              Registration Successfull, please log into your account with
-              Organisation Code: Your Organisation Code Username: Password:
+              Registration Successfull, please check your email for login credentials.
+              <Button className="p-button-text mt-5" label="Proceed to login" onClick={()=>history.replace(LOGIN_ROUTE_PATH)}/>
             </div>
           </div>
         )}

@@ -65,7 +65,7 @@ const Login = () => {
 
           <h4>Welcome</h4>
 
-          <div className="pages-detail mb-6 px-6">Sign into the WACI ERP System</div>
+          <div className="pages-detail mb-6 px-6">Sign into the Church ERP System</div>
 
           <div className="input-panel flex flex-column px-3">
             <div className="p-inputgroup">
@@ -74,7 +74,7 @@ const Login = () => {
               </span>
               <span className="p-float-label">
                 <InputText type="text" value={organisationCode} onChange={(e) => setOrganisationCode(e.target.value)} id="organisationCode" />
-                <label htmlFor="organisationCode">Organisation Code</label>
+                <label htmlFor="organisationCode">Church Code</label>
               </span>
             </div>
             <div className="p-inputgroup mt-3 ">
