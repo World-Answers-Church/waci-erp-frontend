@@ -74,9 +74,9 @@ const Landing = () => {
             onClick={() => history.push("/")}
           >
             <img
-              src="assets/layout/images/logo2x.png"
+              src="assets/layout/images/logo.png"
               alt="ultima-layout"
-              style={{ height: "24px" }}
+              style={{ height: "70px" }}
             />
           </button>
 
@@ -143,7 +143,7 @@ const Landing = () => {
             onClick={() => history.push(LOGIN_ROUTE_PATH)}
             type="button"
             label="Login"
-            className="p-button-secondary "
+            className="p-button-secondary p-button-lg"
           ></Button>
         </div>
       </div>
@@ -154,141 +154,51 @@ const Landing = () => {
       >
         <h2>Streamline Church Management with Our SaaS Application</h2>
         <p className="text-center">
-          Effortlessly manage data, engage with members, and enhance
-          communication.{" "}
+          Elevate your church data management experience with our user-friendly,
+          secure, and affordable platform. Join the future of digital church
+          management today!{" "}
         </p>
-
-        <div className="grid mt-3 mx-0">
-          <div className="col-12 md:col-4 text-center">
-            <h3>Creative</h3>
-            <Button
-              type="button"
-              className="feature-button p-button-rounded p-button-plain p-button-text p-button p-component p-button-icon-only"
-            >
-              <span
-                className="p-button-icon pi pi-pencil fs-xlarge"
-                aria-hidden="true"
-              ></span>
-              <span aria-hidden="true" className="p-button-label">
-                &amp;nbsp;
-              </span>
-            </Button>
-          </div>
-          <div className="col-12 md:col-4 text-center">
-            <h3>Responsive</h3>
-            <Button
-              type="button"
-              className="feature-button p-button-rounded p-button-plain p-button-text p-button p-component p-button-icon-only"
-            >
-              <span
-                className="p-button-icon pi pi-mobile fs-xlarge"
-                aria-hidden="true"
-              ></span>
-              <span aria-hidden="true" className="p-button-label">
-                &amp;nbsp;
-              </span>
-            </Button>
-          </div>
-          <div className="col-12 md:col-4 text-center">
-            <h3>Cross Browser</h3>
-            <Button
-              type="button"
-              className="feature-button p-button-rounded p-button-plain p-button-text p-button p-component p-button-icon-only"
-            >
-              <span
-                className="p-button-icon pi pi-upload fs-xlarge"
-                aria-hidden="true"
-              ></span>
-              <span aria-hidden="true" className="p-button-label">
-                &amp;nbsp;
-              </span>
-            </Button>
-          </div>
-
-          <div className="col-12 md:col-4 text-center">
-            <Button
-              type="button"
-              className="feature-button p-button-rounded p-button-plain p-button-text p-button p-component p-button-icon-only"
-            >
-              <span
-                className="p-button-icon pi pi-tag fs-xlarge"
-                aria-hidden="true"
-              ></span>
-              <span aria-hidden="true" className="p-button-label">
-                &amp;nbsp;
-              </span>
-            </Button>
-            <h3>Well Organized</h3>
-          </div>
-          <div className="col-12 md:col-4 text-center">
-            <Button
-              type="button"
-              className="feature-button p-button-rounded p-button-plain p-button-text p-button p-component p-button-icon-only"
-            >
-              <span
-                className="p-button-icon pi pi-palette fs-xlarge"
-                aria-hidden="true"
-              ></span>
-              <span aria-hidden="true" className="p-button-label">
-                &amp;nbsp;
-              </span>
-            </Button>
-            <h3>Beautiful</h3>
-          </div>
-          <div className="col-12 md:col-4 text-center">
-            <Button
-              type="button"
-              className="feature-button p-button-rounded p-button-plain p-button-text p-button p-component p-button-icon-only"
-            >
-              <span
-                className="p-button-icon pi pi-check-circle fs-xlarge"
-                aria-hidden="true"
-              ></span>
-              <span aria-hidden="true" className="p-button-label">
-                &amp;nbsp;
-              </span>
-            </Button>
-            <h3>Just For you</h3>
-          </div>
-        </div>
       </div>
 
       <div id="promotion" className="flex flex-column align-items-center">
         <div className="grid m-0 py-3 xl:pl-6">
           <div className="col-12 lg:col-8 flex flex-column justify-content-center align-items-center xl:align-items-center pl-6">
-            <h1 className="white-color">Boost Your Productivity.</h1>
+            <h1 className="white-color">
+              Ease data management and communication
+            </h1>
 
             <Button
               type="button"
               onClick={() => history.push(REGISTER_ORGANISATION_ROUTE_PATH)}
-              className="p-button-raised p-button p-component"
+              className="p-button-raised p-button-lg p-component"
             >
               <span className="p-button-label">Sign Up Now</span>
             </Button>
           </div>
           <div className="col-12 lg:col-4">
             <div className="card mt-3 mb-0">
-              <h3>Just</h3>
+              <h3>User Friendly</h3>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab
-                perferendis nesciunt ad reiciendis explicabo consequatur
-                sapiente odit ipsa harum illum
+                Our system is user friendly even to people with little computer
+                skills. The system can also be managed via a computer, laptop
+                and smart phone
               </p>
             </div>
 
             <div className="card mt-3 mb-0">
-              <h3>Like</h3>
+              <h3>Reliability: </h3>
               <p>
-                Ab perferendis nesciunt ad reiciendis explicabo consequatur
-                sapiente odit ipsa harum illum
+                Your data is precious. Rest easy with reliable data backups,
+                ensuring you never lose critical information.
               </p>
             </div>
 
             <div className="card my-3">
-              <h3>That</h3>
+              <h3>Affordability</h3>
               <p>
-                Necessitatibus quaerat voluptates aspernatur iure, aperiam
-                possimus sint sit mollitia!{" "}
+                Try our system for a full month with no credit card required.
+                After the free trial, enjoy our cost-effective pricing at just
+                $9 per month or a discounted annual rate of $90.{" "}
               </p>
             </div>
           </div>
@@ -298,27 +208,27 @@ const Landing = () => {
       <div id="pricing" className="section flex flex-column align-items-center">
         <h2>Pricing</h2>
         <p>
-          Esse delectus sit velit, aspernatur voluptates molestiae, enim
-          recusandae. Odit dicta, maiores quas ad nesciunt, illum expedita
-          veritatis illo quam odio id!
+          Try our system for a full month with no credit card required. After
+          the free trial, enjoy our cost-effective pricing at just $9 per month
+          or a discounted annual rate of $90.
         </p>
 
         <div className="grid m-0 pricing-content">
           <div className="col-12 xl:col-4">
             <div className="card p-0">
               <div className="flex flex-column align-items-center indigo-bgcolor white-color p-6 fs-large">
-                <span>BASIC</span>
-                <h1 className="font-bold">$5</h1>
-                <span>Monthly</span>
+                <span>Free</span>
+                <h1 className="font-bold">$0</h1>
+                <span>One Time</span>
               </div>
               <ul className="options">
                 <li>
                   <i className="pi pi-check"></i>
-                  <span>Responsive</span>
+                  <span>Limited Features</span>
                 </li>
                 <li>
                   <i className="pi pi-check"></i>
-                  <span>Push Messages</span>
+                  <span>Limited storage</span>
                 </li>
               </ul>
             </div>
@@ -327,25 +237,18 @@ const Landing = () => {
             <div className="card p-0">
               <div className="flex flex-column align-items-center pink-bgcolor white-color p-6 fs-large">
                 <span>STANDARD</span>
-                <h1 className="font-bold">$25</h1>
+                <h1 className="font-bold">$9</h1>
                 <span>Monthly</span>
               </div>
               <ul className="options">
                 <li>
                   <i className="pi pi-check"></i>
-                  <span>Responsive</span>
+                  <span>All Features</span>
                 </li>
-                <li>
-                  <i className="pi pi-check"></i>
-                  <span>Push Messages</span>
-                </li>
+
                 <li>
                   <i className="pi pi-check"></i>
                   <span>7/24 Support</span>
-                </li>
-                <li>
-                  <i className="pi pi-check"></i>
-                  <span>Free Shipping</span>
                 </li>
               </ul>
             </div>
@@ -354,37 +257,18 @@ const Landing = () => {
             <div className="card p-0">
               <div className="flex flex-column align-items-center cyan-bgcolor white-color p-6 fs-large">
                 <span>PROFESSIONAL</span>
-                <h1 className="font-bold">$50</h1>
-                <span>Monthly</span>
+                <h1 className="font-bold">$90</h1>
+                <span>Yearly</span>
               </div>
               <ul className="options">
                 <li>
                   <i className="pi pi-check"></i>
-                  <span>Responsive</span>
+                  <span>All Features</span>
                 </li>
-                <li>
-                  <i className="pi pi-check"></i>
-                  <span>Push Messages</span>
-                </li>
+
                 <li>
                   <i className="pi pi-check"></i>
                   <span>7/24 Support</span>
-                </li>
-                <li>
-                  <i className="pi pi-check"></i>
-                  <span>Free Shipping</span>
-                </li>
-                <li>
-                  <i className="pi pi-check"></i>
-                  <span>Unlimited Bandwidth</span>
-                </li>
-                <li>
-                  <i className="pi pi-check"></i>
-                  <span>Unlimited Storage</span>
-                </li>
-                <li>
-                  <i className="pi pi-check"></i>
-                  <span>Gift Cards</span>
                 </li>
               </ul>
             </div>
@@ -398,8 +282,11 @@ const Landing = () => {
       >
         <h2>Video</h2>
         <p>
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-          accusantium doloremque.
+          Our cutting-edge Online Church Information Management System is
+          designed to elevate your church experience and streamline your
+          administrative tasks. Accessible from any device with an internet
+          connection, this platform revolutionizes the way you manage your
+          congregation
         </p>
         <div className="m-3">
           <iframe

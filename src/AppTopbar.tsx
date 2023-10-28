@@ -276,19 +276,46 @@ const AppTopbar = (props: any) => {
   return (
     <div className="layout-topbar shadow-4">
       <div className="layout-topbar-left">
-        <button type="button" style={{ cursor: "pointer" }} className="layout-topbar-logo p-link" onClick={() => history.push("/")}>
-          <img id="app-logo" src="assets/layout/images/waci-white.png" alt="ultima-layout" style={{ height: "2.25rem" }} />
+        <button
+          type="button"
+          style={{ cursor: "pointer" }}
+          className="layout-topbar-logo p-link"
+          onClick={() => history.push("/")}
+        >
+          <img
+            id="app-logo"
+            src="assets/layout/images/waci-white.png"
+            alt="ultima-layout"
+            style={{ height: "2.25rem" }}
+          />
         </button>
-        <button type="button" className="layout-menu-button shadow-6 p-link" onClick={props.onMenuButtonClick}>
+        <button
+          type="button"
+          className="layout-menu-button shadow-6 p-link"
+          onClick={props.onMenuButtonClick}
+        >
           <i className="pi pi-chevron-right"></i>
         </button>
         <button type="button" className="layout-topbar-mobile-button p-link">
-          <i className="pi pi-ellipsis-v fs-large" onClick={props.onMobileTopbarButtonClick}></i>
+          <i
+            className="pi pi-ellipsis-v fs-large"
+            onClick={props.onMobileTopbarButtonClick}
+          ></i>
         </button>
       </div>
-
-      <div className={classNames("layout-topbar-right", { "layout-topbar-mobile-active": props.mobileTopbarActive })}>
-        <div className="layout-topbar-actions-left">{/* <MegaMenu model={model} className="layout-megamenu" /> */}</div>
+      <div className="flex justify-content-center flex-wrap w-full">
+        <div className="flex align-items-center font-bold app-top-bar-title">
+          <h3 className="mt-2">{UserSessionUtils.getChurchDetails()?.name}</h3>
+        </div>
+      </div>
+      <div
+        className={classNames("layout-topbar-right", {
+          "layout-topbar-mobile-active": props.mobileTopbarActive,
+        })}
+      >
+        <div className="layout-topbar-actions-left">
+          {/* <MegaMenu model={model} className="layout-megamenu" /> */}
+        </div>
         <div className="layout-topbar-actions-right">
           <ul className="layout-topbar-items">
             {/* <li className="layout-topbar-item layout-search-item">
@@ -309,14 +336,27 @@ const AppTopbar = (props: any) => {
             </li> */}
 
             <li className="layout-topbar-item notifications">
-              <button className="layout-topbar-action rounded-circle p-link" onClick={(event) => props.onTopbarItemClick({ originalEvent: event, item: "notifications" })}>
+              <button
+                className="layout-topbar-action rounded-circle p-link"
+                onClick={(event) =>
+                  props.onTopbarItemClick({
+                    originalEvent: event,
+                    item: "notifications",
+                  })
+                }
+              >
                 <span className="p-overlay-badge">
                   <i className="pi pi-bell fs-large"></i>
                   <span className="p-badge p-badge-warning p-badge-dot"></span>
                 </span>
               </button>
 
-              <CSSTransition classNames="p-toggleable" timeout={{ enter: 1000, exit: 450 }} in={props.activeTopbarItem === "notifications"} unmountOnExit>
+              <CSSTransition
+                classNames="p-toggleable"
+                timeout={{ enter: 1000, exit: 450 }}
+                in={props.activeTopbarItem === "notifications"}
+                unmountOnExit
+              >
                 <ul className="layout-topbar-action-panel shadow-6 fadeInDown">
                   <li className="mb-3">
                     <span className="px-3 fs-small">
@@ -325,49 +365,99 @@ const AppTopbar = (props: any) => {
                   </li>
                   <li className="layout-topbar-action-item">
                     <div className="flex flex-row align-items-center">
-                      <img src="assets/demo/images/avatar/avatar-1.png" alt="" />
-                      <div className={classNames("flex flex-column", { "ml-3": !isRTL, "mr-3": isRTL })} style={{ flexGrow: "1" }}>
+                      <img
+                        src="assets/demo/images/avatar/avatar-1.png"
+                        alt=""
+                      />
+                      <div
+                        className={classNames("flex flex-column", {
+                          "ml-3": !isRTL,
+                          "mr-3": isRTL,
+                        })}
+                        style={{ flexGrow: "1" }}
+                      >
                         <div className="flex align-items-center justify-content-between mb-1">
-                          <span className="fs-small font-bold">Jerome Bell</span>
+                          <span className="fs-small font-bold">
+                            Jerome Bell
+                          </span>
                           <small>42 mins ago</small>
                         </div>
-                        <span className="fs-small">How to write content about your photographs?</span>
+                        <span className="fs-small">
+                          How to write content about your photographs?
+                        </span>
                       </div>
                     </div>
                   </li>
                   <li className="layout-topbar-action-item">
                     <div className="flex flex-row align-items-center">
-                      <img src="assets/demo/images/avatar/avatar-2.png" alt="" />
-                      <div className={classNames("flex flex-column", { "ml-3": !isRTL, "mr-3": isRTL })} style={{ flexGrow: "1" }}>
+                      <img
+                        src="assets/demo/images/avatar/avatar-2.png"
+                        alt=""
+                      />
+                      <div
+                        className={classNames("flex flex-column", {
+                          "ml-3": !isRTL,
+                          "mr-3": isRTL,
+                        })}
+                        style={{ flexGrow: "1" }}
+                      >
                         <div className="flex align-items-center justify-content-between mb-1">
-                          <span className="fs-small font-bold">Cameron Williamson</span>
+                          <span className="fs-small font-bold">
+                            Cameron Williamson
+                          </span>
                           <small>48 mins ago</small>
                         </div>
-                        <span className="fs-small">Start a blog to reach your creative peak.</span>
+                        <span className="fs-small">
+                          Start a blog to reach your creative peak.
+                        </span>
                       </div>
                     </div>
                   </li>
                   <li className="layout-topbar-action-item">
                     <div className="flex flex-row align-items-center">
-                      <img src="assets/demo/images/avatar/avatar-3.png" alt="" />
-                      <div className={classNames("flex flex-column", { "ml-3": !isRTL, "mr-3": isRTL })} style={{ flexGrow: "1" }}>
+                      <img
+                        src="assets/demo/images/avatar/avatar-3.png"
+                        alt=""
+                      />
+                      <div
+                        className={classNames("flex flex-column", {
+                          "ml-3": !isRTL,
+                          "mr-3": isRTL,
+                        })}
+                        style={{ flexGrow: "1" }}
+                      >
                         <div className="flex align-items-center justify-content-between mb-1">
                           <span className="fs-small font-bold">Anna Miles</span>
                           <small>1 day ago</small>
                         </div>
-                        <span className="fs-small">Caring is the new marketing</span>
+                        <span className="fs-small">
+                          Caring is the new marketing
+                        </span>
                       </div>
                     </div>
                   </li>
                   <li className="layout-topbar-action-item">
                     <div className="flex flex-row align-items-center">
-                      <img src="assets/demo/images/avatar/avatar-4.png" alt="" />
-                      <div className={classNames("flex flex-column", { "ml-3": !isRTL, "mr-3": isRTL })} style={{ flexGrow: "1" }}>
+                      <img
+                        src="assets/demo/images/avatar/avatar-4.png"
+                        alt=""
+                      />
+                      <div
+                        className={classNames("flex flex-column", {
+                          "ml-3": !isRTL,
+                          "mr-3": isRTL,
+                        })}
+                        style={{ flexGrow: "1" }}
+                      >
                         <div className="flex align-items-center justify-content-between mb-1">
-                          <span className="fs-small font-bold">Arlene Mccoy</span>
+                          <span className="fs-small font-bold">
+                            Arlene Mccoy
+                          </span>
                           <small>4 day ago</small>
                         </div>
-                        <span className="fs-small">Starting your traveling blog with Vasco.</span>
+                        <span className="fs-small">
+                          Starting your traveling blog with Vasco.
+                        </span>
                       </div>
                     </div>
                   </li>
@@ -375,11 +465,24 @@ const AppTopbar = (props: any) => {
               </CSSTransition>
             </li>
             <li className="layout-topbar-item app">
-              <button className="layout-topbar-action rounded-circle p-link" onClick={(event) => props.onTopbarItemClick({ originalEvent: event, item: "apps" })}>
+              <button
+                className="layout-topbar-action rounded-circle p-link"
+                onClick={(event) =>
+                  props.onTopbarItemClick({
+                    originalEvent: event,
+                    item: "apps",
+                  })
+                }
+              >
                 <i className="pi pi-table fs-large"></i>
               </button>
 
-              <CSSTransition classNames="p-toggleable" timeout={{ enter: 1000, exit: 450 }} in={props.activeTopbarItem === "apps"} unmountOnExit>
+              <CSSTransition
+                classNames="p-toggleable"
+                timeout={{ enter: 1000, exit: 450 }}
+                in={props.activeTopbarItem === "apps"}
+                unmountOnExit
+              >
                 <div className="layout-topbar-action-panel shadow-6">
                   <div className="grid grid-nogutter">
                     <div className="layout-topbar-action-item col-4">
@@ -425,28 +528,57 @@ const AppTopbar = (props: any) => {
             <li className="layout-topbar-item">
               <button
                 className="layout-topbar-action flex flex-row justify-content-center align-items-center px-2 rounded-circle p-link"
-                onClick={(event) => props.onTopbarItemClick({ originalEvent: event, item: "profile" })}
+                onClick={(event) =>
+                  props.onTopbarItemClick({
+                    originalEvent: event,
+                    item: "profile",
+                  })
+                }
               >
-                <img src="assets/demo/images/avatar/amyelsner.png" alt="avatar" style={{ width: "32px", height: "32px" }} />
+                <img
+                  src="assets/demo/images/avatar/amyelsner.png"
+                  alt="avatar"
+                  style={{ width: "32px", height: "32px" }}
+                />
               </button>
 
-              <CSSTransition classNames="p-toggleable" timeout={{ enter: 1000, exit: 450 }} in={props.activeTopbarItem === "profile"} unmountOnExit>
+              <CSSTransition
+                classNames="p-toggleable"
+                timeout={{ enter: 1000, exit: 450 }}
+                in={props.activeTopbarItem === "profile"}
+                unmountOnExit
+              >
                 <ul className="layout-topbar-action-panel shadow-6">
                   <li className="layout-topbar-action-item">
                     <button className="flex flex-row align-items-center p-link">
-                      <i className={classNames("pi pi-cog", { "mr-2": !isRTL, "ml-2": isRTL })}></i>
+                      <i
+                        className={classNames("pi pi-cog", {
+                          "mr-2": !isRTL,
+                          "ml-2": isRTL,
+                        })}
+                      ></i>
                       <span>Settings</span>
                     </button>
                   </li>
                   <li className="layout-topbar-action-item">
                     <button className="flex flex-row align-items-center p-link">
-                      <i className={classNames("pi pi-file", { "mr-2": !isRTL, "ml-2": isRTL })}></i>
+                      <i
+                        className={classNames("pi pi-file", {
+                          "mr-2": !isRTL,
+                          "ml-2": isRTL,
+                        })}
+                      ></i>
                       <span>Terms of Usage</span>
                     </button>
                   </li>
                   <li className="layout-topbar-action-item ">
                     <button className="flex flex-row align-items-center p-link">
-                      <i className={classNames("pi pi-compass", { "mr-2": !isRTL, "ml-2": isRTL })}></i>
+                      <i
+                        className={classNames("pi pi-compass", {
+                          "mr-2": !isRTL,
+                          "ml-2": isRTL,
+                        })}
+                      ></i>
                       <span>Support</span>
                     </button>
                   </li>
@@ -457,7 +589,12 @@ const AppTopbar = (props: any) => {
                       }}
                       className="flex flex-row align-items-center p-link"
                     >
-                      <i className={classNames("pi pi-power-off", { "mr-2": !isRTL, "ml-2": isRTL })}></i>
+                      <i
+                        className={classNames("pi pi-power-off", {
+                          "mr-2": !isRTL,
+                          "ml-2": isRTL,
+                        })}
+                      ></i>
                       <span>Logout</span>
                     </button>
                   </li>

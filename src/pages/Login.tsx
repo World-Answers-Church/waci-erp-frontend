@@ -46,6 +46,7 @@ const Login = () => {
       .then(async (response) => {
         setIsSaving(false);
         UserSessionUtils.setUserDetails(response?.user);
+        UserSessionUtils.setChurchDetails(response?.church);
         UserSessionUtils.setUserAuthToken(response?.accessToken);
         goDashboard();
       })
@@ -65,7 +66,9 @@ const Login = () => {
 
           <h4>Welcome</h4>
 
-          <div className="pages-detail mb-6 px-6">Sign into the Church ERP System</div>
+          <div className="pages-detail mb-6 px-6">
+            Sign into the Church ERP System
+          </div>
 
           <div className="input-panel flex flex-column px-3">
             <div className="p-inputgroup">
@@ -73,7 +76,12 @@ const Login = () => {
                 <i className="pi pi-home"></i>
               </span>
               <span className="p-float-label">
-                <InputText type="text" value={organisationCode} onChange={(e) => setOrganisationCode(e.target.value)} id="organisationCode" />
+                <InputText
+                  type="text"
+                  value={organisationCode}
+                  onChange={(e) => setOrganisationCode(e.target.value)}
+                  id="organisationCode"
+                />
                 <label htmlFor="organisationCode">Church Code</label>
               </span>
             </div>
@@ -82,7 +90,12 @@ const Login = () => {
                 <i className="pi pi-envelope"></i>
               </span>
               <span className="p-float-label">
-                <InputText type="text" value={username} onChange={(e) => setUsername(e.target.value)} id="username" />
+                <InputText
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  id="username"
+                />
                 <label htmlFor="username">Email/Username</label>
               </span>
             </div>
@@ -91,13 +104,23 @@ const Login = () => {
                 <i className="pi pi-lock"></i>
               </span>
               <span className="p-float-label">
-                <InputText type="password" value={password} onChange={(e) => setPassword(e.target.value)} id="password" />
+                <InputText
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  id="password"
+                />
                 <label htmlFor="inputgroup2">Password</label>
               </span>
             </div>
           </div>
           <Messages ref={message} style={{ width: "100%" }} />
-          <Button loading={isSaving} className="login-button mb-6 px-3" label="LOGIN" onClick={submitDetails}></Button>
+          <Button
+            loading={isSaving}
+            className="login-button mb-6 px-3"
+            label="LOGIN"
+            onClick={submitDetails}
+          ></Button>
         </div>
       </div>
     </div>
