@@ -1,4 +1,12 @@
-import { KEY_BEARER_TOKEN, KEY_IS_LOGGED_IN, KEY_RANDOM_DEVICE_ID, KEY_REFRESH_TOKEN, KEY_SELECTED_APPLICATION_MODULE, KEY_USER_DETAILS } from "../constants/Constants";
+import {
+  KEY_BEARER_TOKEN,
+  KEY_CHURCH_DETAILS,
+  KEY_IS_LOGGED_IN,
+  KEY_RANDOM_DEVICE_ID,
+  KEY_REFRESH_TOKEN,
+  KEY_SELECTED_APPLICATION_MODULE,
+  KEY_USER_DETAILS,
+} from "../constants/Constants";
 import { Module } from "../constants/Module";
 import { LOGIN_ROUTE_PATH } from "../route_paths/resolver/PageRoutes";
 import { generateId } from "./Utils";
@@ -23,7 +31,9 @@ export class UserSessionUtils {
    * @returns
    */
   static getBearerToken() {
-    return localStorage.getItem(KEY_BEARER_TOKEN) ? `${localStorage.getItem(KEY_BEARER_TOKEN)}` : "";
+    return localStorage.getItem(KEY_BEARER_TOKEN)
+      ? `${localStorage.getItem(KEY_BEARER_TOKEN)}`
+      : "";
   }
 
   /**
@@ -76,12 +86,21 @@ export class UserSessionUtils {
     localStorage.setItem(KEY_IS_LOGGED_IN, "loggedIn");
   }
 
+  static setChurchDetails(churchDetails: {}) {
+    localStorage.setItem(KEY_CHURCH_DETAILS, JSON.stringify(churchDetails));
+  }
+  static getChurchDetails() {
+    if (localStorage.getItem(KEY_CHURCH_DETAILS))
+      return JSON.parse(localStorage.getItem(KEY_CHURCH_DETAILS)!);
+    return {};
+  }
   /**
    * This method is used to get a JSON object containing user details
    * @returns
    */
   static getUserDetails() {
-    if (localStorage.getItem(KEY_USER_DETAILS)) return JSON.parse(localStorage.getItem(KEY_USER_DETAILS)!);
+    if (localStorage.getItem(KEY_USER_DETAILS))
+      return JSON.parse(localStorage.getItem(KEY_USER_DETAILS)!);
     return {};
   }
   /**
@@ -115,7 +134,8 @@ export class UserSessionUtils {
    */
   static getDeviceId() {
     var deviceId = localStorage.getItem(KEY_RANDOM_DEVICE_ID);
-    if (deviceId === null || deviceId.length === 0) localStorage.setItem(KEY_RANDOM_DEVICE_ID, generateId(40));
+    if (deviceId === null || deviceId.length === 0)
+      localStorage.setItem(KEY_RANDOM_DEVICE_ID, generateId(40));
     return localStorage.getItem(KEY_RANDOM_DEVICE_ID);
   }
 }

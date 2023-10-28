@@ -9,11 +9,14 @@ export const KEY_APP_VERSION = "v1.0.0"; // This represents the current running 
  * Also, the risk of other people using this key is minimized by setting the URIs in the Google Console.
  * More research needs to be done to read the variable from the .env file
  */
-export const REACT_APP_GOOGLE_CLIENT_ID = "631187462392-bu7ph8e7nis0olor367ugdt5iooghmei.apps.googleusercontent.com";
+export const REACT_APP_GOOGLE_CLIENT_ID =
+  "631187462392-bu7ph8e7nis0olor367ugdt5iooghmei.apps.googleusercontent.com";
 export const KEY_BEARER_TOKEN = "KEY_BEARER_TOKEN";
 export const KEY_REFRESH_TOKEN = "KEY_REFRESH_TOKEN";
 export const KEY_USER_DETAILS = "KEY_USER_DETAILS";
-export const KEY_SELECTED_APPLICATION_MODULE = "KEY_SELECTED_APPLICATION_MODULE";
+export const KEY_CHURCH_DETAILS = "KEY_CHURCH_DETAILS";
+export const KEY_SELECTED_APPLICATION_MODULE =
+  "KEY_SELECTED_APPLICATION_MODULE";
 export const KEY_SELECTED_OBJECT = "KEY_SELECTED_OBJECT";
 export const KEY_IS_LOGGED_IN = "KEY_IS_LOGGED_IN";
 export const KEY_RANDOM_DEVICE_ID = "KEY_RANDOM_DEVICE_ID";
@@ -35,7 +38,8 @@ export const ICON_REFRESH = "pi pi-refresh";
 export const CSS_FILTER_SUBMIT_BUTTON = "p-button-primary mr-2 ml-2 mt-5";
 export const CSS_FILTER_RESET_BUTTON = "p-button-secondary mr-2 ml-2 mt-5";
 export const CSS_FILTER_SEARCH_INPUT_DIV = "field col-12 md:col-4 p-fluid";
-export const CSS_FILTER_SEARCH_INPUT_NORMAL_DIV = "field col-12  md:col-4 p-fluid";
+export const CSS_FILTER_SEARCH_INPUT_NORMAL_DIV =
+  "field col-12  md:col-4 p-fluid";
 export const CSS_FILTER_DEFAULT_DIV = "field col-12  md:col-2 p-fluid";
 export const CSS_FILTER_SMALL_DIV = "field col-12  md:col-1 p-fluid";
 export const CSS_FILTER_MEDIUM_DIV = "field col-3 p-fluid";
@@ -136,7 +140,14 @@ export const SupportedTerritories = [
   { territory: "Kenya", countryIsoCode: "KE" },
 ];
 // Regular Expressions
-export const EmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+export const EmailRegex =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 // Known links
-export const APP_BASE_CONTEXT = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/#";
+export const APP_BASE_CONTEXT =
+  window.location.protocol +
+  "//" +
+  window.location.hostname +
+  ":" +
+  window.location.port +
+  "/#";
