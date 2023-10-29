@@ -54,7 +54,24 @@ export const TITLE_DEACTIVATE_ROLE = "Deactivate Role";
 export const TITLE_ACTIVATE_ROLE = "Activate Role";
 export const TITLE_USER_DETAILS = "User Details for {0}";
 export const TITLE_USER_ROLES = "User Roles for {0}";
-export const LABEL_DEACTIVATE_ROLE_CONFIRMATION = "Are you sure you want to deactivate this role?";
-export const LABEL_ACTIVATE_ROLE_CONFIRMATION = "Are you sure you want to activate this role?";
+export const LABEL_DEACTIVATE_ROLE_CONFIRMATION =
+  "Are you sure you want to deactivate this role?";
+export const LABEL_ACTIVATE_ROLE_CONFIRMATION =
+  "Are you sure you want to activate this role?";
 export const LABEL_EDIT_ROLES = "Edit Roles";
 export const LABEL_SYNC_USERS = "Sync Users from EPT Sheet";
+
+//Member Constants
+export const FULL_NAME_LABEL = "Full Name";
+export const FIRST_NAME_LABEL = "First Name";
+export const LAST_NAME_LABEL = "Last Name";
+export const SALUTATION_LABEL = "Salutation";
+export const GENDER_LABEL = "Gender";
+export const MIDDLE_NAME_LABEL = "Middle Name";
+export const PHYSICAL_ADDRESS_LABEL = "Physical Address";
+export const PHONE_NUMBER_LABEL = "Phone Number";
+export const EMAIL_ADDRESS_LABEL = "Email Address";
+export const YEAR_JOINED_LABEL = "Year Joined";
+export const OCCUPATION_LABEL = "Occupation";
+export const NIN_LABEL = "NIN";
+export const IMAGE_URL_LABEL = "Image URL";

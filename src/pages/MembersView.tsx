@@ -8,14 +8,21 @@ import { useHistory } from "react-router";
 import { Panel } from "primereact/panel";
 import { BreadCrumb } from "primereact/breadcrumb";
 import * as constants from "../app_utils/constants/Constants";
-
+import { generatePath } from "react-router-dom";
 import * as labels from "../app_utils/constants/Labels";
 import useShowModalDialog from "../app_utils/components/ShowModalHook";
-import { HOME_ROUTE_PATH } from "../app_utils/route_paths/resolver/PageRoutes";
+import {
+  HOME_ROUTE_PATH,
+  MEMBER_DETAILS_ROUTE_PATH,
+} from "../app_utils/route_paths/resolver/PageRoutes";
 import { PrimeIcons } from "primereact/api";
 import { BaseApiServiceImpl } from "../app_utils/api/BaseApiServiceImpl";
 import { MessageUtils } from "../app_utils/utils/MessageUtils";
-import { generalStatusBodyTemplate, replaceWithUnderscore, toReadableDate } from "../app_utils/utils/Utils";
+import {
+  generalStatusBodyTemplate,
+  replaceWithUnderscore,
+  toReadableDate,
+} from "../app_utils/utils/Utils";
 import { getFilterComponent } from "../app_utils/components/Filters";
 import { paginatorTemplate } from "../app_utils/components/PaginatorTemplate";
 import { filtersHeadertemplate } from "../app_utils/components/FiltersPanelHeader";
@@ -25,10 +32,14 @@ const MembersView = () => {
   const [records, setRecords] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchTermFilter, setSearchTermFilter] = useState<string | null>(null);
-  const [recordStatusFilter, setRecordStatusFilter] = useState<string | null>(null);
+  const [recordStatusFilter, setRecordStatusFilter] = useState<string | null>(
+    null
+  );
   const [totalItems, setTotalItems] = useState<number>(0);
   const [first, setFirst] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(constants.MAXIMUM_RECORDS_PER_PAGE);
+  const [limit, setLimit] = useState<number>(
+    constants.MAXIMUM_RECORDS_PER_PAGE
+  );
   const [selectedMember, setSelectedMember] = useState<any>(null);
   const [territories, setTerritories] = useState<any>(null);
   const [territoryFilter, setTerritoryFilter] = useState<any>(null);
@@ -63,9 +74,12 @@ const MembersView = () => {
    */
   const getQueryParameters = () => {
     let searchParameters: any = { offset: offset, limit: limit };
-    if (searchTermFilter !== null) searchParameters.searchTerm = searchTermFilter;
-    if (recordStatusFilter !== null) searchParameters.recordStatus = recordStatusFilter;
-    if (territoryFilter !== null) searchParameters.commaSeparatedTerritoryIds = territoryFilter;
+    if (searchTermFilter !== null)
+      searchParameters.searchTerm = searchTermFilter;
+    if (recordStatusFilter !== null)
+      searchParameters.recordStatus = recordStatusFilter;
+    if (territoryFilter !== null)
+      searchParameters.commaSeparatedTerritoryIds = territoryFilter;
 
     return searchParameters;
   };
@@ -170,10 +184,20 @@ const MembersView = () => {
     return (
       <div className="actions">
         <Button
-          label={labels.LABEL_EDIT}
-          className="p-button-sm p-button-warning p-mr-2"
+          icon={PrimeIcons.PENCIL}
+          className="p-button-sm p-button-warning mr-2"
           onClick={() => {
             openEditFormDialog(rowData);
+          }}
+        />
+
+        <Button
+          icon={PrimeIcons.EYE}
+          className="p-button-sm p-button-primary "
+          onClick={() => {
+            history.push(
+              generatePath(MEMBER_DETAILS_ROUTE_PATH, { id: rowData.id })
+            );
           }}
         />
       </div>
@@ -204,8 +228,18 @@ const MembersView = () => {
   const filterButtonsTemplate = (
     <>
       <div className="col-6  md:col-2 p-fluid" key="filterBtns">
-        <Button icon={constants.ICON_SEARCH} className={constants.CSS_FILTER_SUBMIT_BUTTON} onClick={onSubmitFilter} loading={isLoading} />
-        <Button icon={constants.ICON_REFRESH} className={constants.CSS_FILTER_RESET_BUTTON} onClick={resetFilters} loading={isLoading} />
+        <Button
+          icon={constants.ICON_SEARCH}
+          className={constants.CSS_FILTER_SUBMIT_BUTTON}
+          onClick={onSubmitFilter}
+          loading={isLoading}
+        />
+        <Button
+          icon={constants.ICON_REFRESH}
+          className={constants.CSS_FILTER_RESET_BUTTON}
+          onClick={resetFilters}
+          loading={isLoading}
+        />
       </div>
     </>
   );
@@ -269,7 +303,12 @@ const MembersView = () => {
         <BreadCrumb home={breadcrumbHome} model={breadcrumbItems} />
       </div>
       <div className="col-6 flex justify-content-end flex-wrap">
-        <Button label={"Create Member"} icon={PrimeIcons.PLUS} className="p-button-secondary" onClick={openNewFormDialog} />
+        <Button
+          label={"Create Member"}
+          icon={PrimeIcons.PLUS}
+          className="p-button-secondary"
+          onClick={openNewFormDialog}
+        />
       </div>
       <Messages ref={message} style={{ width: "100%" }} />
       <div className="col-12">
@@ -282,20 +321,56 @@ const MembersView = () => {
       </div>
       <div className="col-12">
         <div className="card">
-          <DataTable responsiveLayout="stack" value={records} paginator={false} className="datatable-responsive" paginatorPosition="both" emptyMessage="No record found." loading={isLoading}>
-            <Column field="Index" header="#" style={{ width: "70px" }} body={rowIndexTemplate}></Column>
+          <DataTable
+            responsiveLayout="stack"
+            value={records}
+            paginator={false}
+            className="datatable-responsive"
+            paginatorPosition="both"
+            emptyMessage="No record found."
+            loading={isLoading}
+          >
+            <Column
+              field="Index"
+              header="#"
+              style={{ width: "70px" }}
+              body={rowIndexTemplate}
+            ></Column>
             <Column field="fullName" header={"Full Name"}></Column>
             <Column field="phoneNumber" header={"Phone Number"}></Column>
-            <Column field="physicalAddress" header={"Physical Address"}></Column>
+            <Column
+              field="physicalAddress"
+              header={"Physical Address"}
+            ></Column>
             <Column field="yearJoined" header={"Year Joined"}></Column>
-            <Column header={labels.LABEL_STATUS} body={statusBodyTemplate}></Column>
-            <Column style={{ width: "120px" }} header="Actions" body={actionBodyTemplate}></Column>
+            <Column
+              header={labels.LABEL_STATUS}
+              body={statusBodyTemplate}
+            ></Column>
+            <Column
+              style={{ width: "120px" }}
+              header="Actions"
+              body={actionBodyTemplate}
+            ></Column>
           </DataTable>
 
-          <Paginator first={first} rows={constants.MAXIMUM_RECORDS_PER_PAGE} totalRecords={totalItems} alwaysShow={true} onPageChange={onPageChange} template={paginatorTemplate} />
+          <Paginator
+            first={first}
+            rows={constants.MAXIMUM_RECORDS_PER_PAGE}
+            totalRecords={totalItems}
+            alwaysShow={true}
+            onPageChange={onPageChange}
+            template={paginatorTemplate}
+          />
         </div>
       </div>
-      <MemberFormDialogView isOpen={openDialog} toggle={toggleOpenDialog} messageRef={message} memberObject={selectedMember} reloadFn={fetchRecordsFromServer}></MemberFormDialogView>
+      <MemberFormDialogView
+        isOpen={openDialog}
+        toggle={toggleOpenDialog}
+        messageRef={message}
+        memberObject={selectedMember}
+        reloadFn={fetchRecordsFromServer}
+      ></MemberFormDialogView>
     </div>
   );
 };
