@@ -536,7 +536,7 @@ const AppTopbar = (props: any) => {
                 }
               >
                 <img
-                  src="assets/demo/images/avatar/amyelsner.png"
+                  src="assets/layout/images/profile-image.png"
                   alt="avatar"
                   style={{ width: "32px", height: "32px" }}
                 />
