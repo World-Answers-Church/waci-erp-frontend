@@ -286,7 +286,7 @@ const AppTopbar = (props: any) => {
             id="app-logo"
             src="assets/layout/images/waci-white.png"
             alt="ultima-layout"
-            style={{ height: "2.25rem" }}
+            style={{ height: "2.9rem" }}
           />
         </button>
         <button
